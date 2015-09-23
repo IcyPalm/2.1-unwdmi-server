@@ -37,3 +37,4 @@ local.properties
 
 # Mac
 .DS_Store
+/bin/
