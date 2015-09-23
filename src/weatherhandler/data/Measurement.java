@@ -1,7 +1,7 @@
 package weatherhandler.data;
 
 public class Measurement {
-    String station, date, time, temperature, dewpoint, stationPressure, seaLevelPressure, visibility, windSpeed, precipitation, snowDepth, events, cloudCover, windDirection;
+    String station, date, time, temperature, dewPoint, stationPressure, seaLevelPressure, visibility, windSpeed, precipitation, snowDepth, events, cloudCover, windDirection;
 
     // Getters
     public String getStation() {
@@ -16,8 +16,8 @@ public class Measurement {
     public String getTemperature() {
         return temperature;
     }
-    public String getDewpoint() {
-        return dewpoint;
+    public String getDewPoint() {
+        return dewPoint;
     }
     public String getStationPressure() {
         return stationPressure;
@@ -60,8 +60,8 @@ public class Measurement {
     public void setTemperature(String temperature) {
         this.temperature = temperature;
     }
-    public void setDewpoint(String dewpoint) {
-        this.dewpoint = dewpoint;
+    public void setDewPoint(String dewPoint) {
+        this.dewPoint = dewPoint;
     }
     public void setStationPressure(String stationPressure) {
         this.stationPressure = stationPressure;
@@ -98,7 +98,7 @@ public class Measurement {
         sb.append("\t<DATE>" + date + "</DATE>\n");
         sb.append("\t<TIME>" + time + "</TIME>\n");
         sb.append("\t<TEMP>" + temperature + "</TEMP>\n");
-        sb.append("\t<DEWP>" + dewpoint + "</DEWP>\n");
+        sb.append("\t<DEWP>" + dewPoint + "</DEWP>\n");
         sb.append("\t<STP>" + stationPressure + "</STP>\n");
         sb.append("\t<SLP>" + seaLevelPressure + "</SLP>\n");
         sb.append("\t<VISIB>" + visibility + "</VISIB>\n");
@@ -119,7 +119,7 @@ public class Measurement {
         sb.append("DATE:" + date);
         sb.append("TIME:" + time);
         sb.append("TEMP:" + temperature);
-        sb.append("DEWP:" + dewpoint);
+        sb.append("DEWP:" + dewPoint);
         sb.append("STP:" + stationPressure);
         sb.append("SLP:" + seaLevelPressure);
         sb.append("VISIB:" + visibility);

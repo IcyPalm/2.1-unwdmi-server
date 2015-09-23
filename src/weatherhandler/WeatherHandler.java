@@ -93,34 +93,34 @@ public class WeatherHandler extends DefaultHandler {
             mes.setTemperature(new String(ch, start, length));
             bTEMP = false;
         } else if (bDEWP) {
-            mes.setDewpoint(new String(ch, start, length));
+            mes.setDewPoint(new String(ch, start, length));
             bDEWP = false;
         } else if (bSTP) {
             mes.setStationPressure(new String(ch, start, length));
             bSTP = false;
         } else if (bSLP) {
-            mes.setSealevelPressure(new String(ch, start, length));
+            mes.setSeaLevelPressure(new String(ch, start, length));
             bSLP = false;
         } else if (bVISIB) {
             mes.setVisibility(new String(ch, start, length));
             bVISIB = false;
         } else if (bWDSP) {
-            mes.setWindspeed(new String(ch, start, length));
+            mes.setWindSpeed(new String(ch, start, length));
             bWDSP = false;
         } else if (bPRCP) {
-            mes.setPrercipitation(new String(ch, start, length));
+            mes.setPrecipitation(new String(ch, start, length));
             bPRCP = false;
         } else if (bSNDP) {
-            mes.setSnowdepth(new String(ch, start, length));
+            mes.setSnowDepth(new String(ch, start, length));
             bSNDP = false;
         } else if (bFRSHTT) {
             mes.setEvents(new String(ch, start, length));
             bFRSHTT = false;
         } else if (bCLDC) {
-            mes.setCloudcover(new String(ch, start, length));
+            mes.setCloudCover(new String(ch, start, length));
             bCLDC = false;
         } else if (bWNDDIR) {
-            mes.setWinddirection(new String(ch, start, length));
+            mes.setWindDirection(new String(ch, start, length));
             bWNDDIR = false;
         }
     }
