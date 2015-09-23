@@ -12,15 +12,17 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import weatherhandler.data.Measurement;
+import weatherhandler.processor.Processor;
 
 public class WeatherParser {
-    public WeatherParser(String input){
+    public WeatherParser(String input, Processor out) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
             SAXParser saxParser = saxParserFactory.newSAXParser();
             WeatherHandler handler = new WeatherHandler();
             saxParser.parse(new InputSource(new StringReader(input)), handler);
             List<Measurement> measurements = handler.getList();
+            out.processMeasurements(measurements);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
