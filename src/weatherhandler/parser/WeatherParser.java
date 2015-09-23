@@ -1,4 +1,4 @@
-package weatherhandler;
+package weatherhandler.parser;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,14 +16,12 @@ import weatherhandler.data.Measurement;
 public class WeatherParser {
     public WeatherParser(String input){
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-        try{
+        try {
             SAXParser saxParser = saxParserFactory.newSAXParser();
             WeatherHandler handler = new WeatherHandler();
             saxParser.parse(new InputSource(new StringReader(input)), handler);
             List<Measurement> measurements = handler.getList();
-            this.save(measurements);
-        }
-        catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
     }

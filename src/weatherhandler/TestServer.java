@@ -1,5 +1,7 @@
 package weatherhandler;
 
+import weatherhandler.parser.WeatherParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,14 +11,13 @@ import java.net.Socket;
 public class TestServer implements Runnable {
     private Socket socket;
     private ServerSocket TCPsocket;
-    private Connection connection;
 
     @Override
     public void run() {
         System.out.println("Server started");
         try {
             TCPsocket = new ServerSocket(7789);
-        } catch (IOException | SQLException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         while (true) {
@@ -73,5 +74,4 @@ class ServerHandler implements Runnable {
         }
 
     }
-
 }

@@ -1,4 +1,4 @@
-package weatherhandler;
+package weatherhandler.parser;
 
 import java.util.ArrayList;
 import java.util.List;
