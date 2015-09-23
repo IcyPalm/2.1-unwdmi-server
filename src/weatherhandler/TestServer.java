@@ -24,8 +24,7 @@ public class TestServer implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            ServerHandler handler = new ServerHandler(socket);
-            handler.run();
+            new Thread(new ServerHandler(socket)).start();
             System.out.println("New Client");
         }
     }
@@ -51,13 +50,16 @@ class ServerHandler implements Runnable {
     @Override
     public void run() {
         String line;
-        StringBuffer lines = new StringBuffer() ;
+        StringBuilder lines = new StringBuilder() ;
         try{
             BufferedReader in = new BufferedReader(new InputStreamReader (socket.getInputStream()));
             while( (line = in.readLine()) != null){
-                if(line =="<MEASUREMENT>\n")System.out.println("HOERA!");
                 lines.append(line);
-                new WeatherParser(lines.toString());
+                if(line.contains("</WEATHERDATA>"))
+                {
+                    new WeatherParser(lines.toString());
+                    lines.setLength(0);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
