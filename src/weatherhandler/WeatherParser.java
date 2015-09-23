@@ -21,10 +21,9 @@ public class WeatherParser {
             WeatherHandler handler = new WeatherHandler();
             saxParser.parse(new InputSource(new StringReader(input)), handler);
             List<Measurement> measurements = handler.getList();
-            for (Measurement measurement : measurements) {
-                //System.out.println(measurement.toString());
-            }
-        }catch (ParserConfigurationException | SAXException | IOException e) {
+            this.save(measurements);
+        }
+        catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
     }

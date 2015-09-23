@@ -9,16 +9,17 @@ import java.net.Socket;
 public class TestServer implements Runnable {
     private Socket socket;
     private ServerSocket TCPsocket;
-    
+    private Connection connection;
+
     @Override
     public void run() {
         System.out.println("Server started");
         try {
             TCPsocket = new ServerSocket(7789);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
-        while(true){
+        while (true) {
             try {
                 socket = TCPsocket.accept();
             } catch (IOException e) {
@@ -28,8 +29,8 @@ public class TestServer implements Runnable {
             System.out.println("New Client");
         }
     }
-    
-    public void interrupt(){
+
+    public void interrupt() {
         try {
             TCPsocket.close();
         } catch (IOException e) {
@@ -42,7 +43,7 @@ public class TestServer implements Runnable {
 class ServerHandler implements Runnable {
 
     private Socket socket;
-    
+
     public ServerHandler(Socket socket) {
         this.socket = socket;
     }
@@ -50,13 +51,12 @@ class ServerHandler implements Runnable {
     @Override
     public void run() {
         String line;
-        StringBuilder lines = new StringBuilder() ;
-        try{
-            BufferedReader in = new BufferedReader(new InputStreamReader (socket.getInputStream()));
-            while( (line = in.readLine()) != null){
+        StringBuilder lines = new StringBuilder();
+        try {
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            while ((line = in.readLine()) != null) {
                 lines.append(line);
-                if(line.contains("</WEATHERDATA>"))
-                {
+                if (line.contains("</WEATHERDATA>")) {
                     new WeatherParser(lines.toString());
                     lines.setLength(0);
                 }
@@ -64,7 +64,7 @@ class ServerHandler implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
 
-           // Close connection
+            // Close connection
             try {
                 socket.close();
             } catch (IOException e1) {

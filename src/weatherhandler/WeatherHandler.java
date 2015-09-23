@@ -10,7 +10,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import weatherhandler.data.Measurement;
 
 public class WeatherHandler extends DefaultHandler {
-
     private List<Measurement> measurements = new ArrayList<Measurement>();
 
     private boolean bSTN = false;
@@ -29,10 +28,8 @@ public class WeatherHandler extends DefaultHandler {
     private boolean bWNDDIR = false;
 
     private Measurement mes = null;
-    
-    
-    
-    public List<Measurement> getList(){
+
+    public List<Measurement> getList() {
         return measurements;
     }
 
@@ -41,7 +38,7 @@ public class WeatherHandler extends DefaultHandler {
             throws SAXException {
         if (qName.equalsIgnoreCase("MEASUREMENT")) {
             //initialize Measurement object
-            mes = new Measurement();            
+            mes = new Measurement();
         } else if (qName.equalsIgnoreCase("STN")) {
             bSTN = true;
         } else if (qName.equalsIgnoreCase("DATE")) {
@@ -125,6 +122,6 @@ public class WeatherHandler extends DefaultHandler {
         } else if (bWNDDIR) {
             mes.setWinddirection(new String(ch, start, length));
             bWNDDIR = false;
-        }   
+        }
     }
 }
