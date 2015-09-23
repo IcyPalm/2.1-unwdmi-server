@@ -13,13 +13,13 @@ Haal repo binnen met de SSH Clone URL, als het goed is staan je remotes meteen
 goed.
 
 ```bash
-$ git clone git@github.com:IcyPalm/2.1Bazen.git
+$ git clone git@github.com:IcyPalm/2.1EINDBazen.git
 ```
 
 Staan je remotes niet goed, dan doe je ook nog:
 
 ```bash
-$ git remote add origin git@github.com:IcyPalm/2.1Bazen.git
+$ git remote add origin git@github.com:IcyPalm/2.1EINDBazen.git
 ```
 
 Maak voordat je ergens aan werkt, éérst een nieuwe branch aan! Dan hoeven we
