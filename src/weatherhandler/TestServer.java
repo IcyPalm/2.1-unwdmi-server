@@ -2,7 +2,7 @@ package weatherhandler;
 
 import weatherhandler.parser.WeatherParser;
 import weatherhandler.processor.Processor;
-import weatherhandler.processor.NullProcessor;
+import weatherhandler.processor.DBStorageProcessor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,7 +55,7 @@ class ServerHandler implements Runnable {
     public void run() {
         String line;
         StringBuilder lines = new StringBuilder();
-        Processor processor = new NullProcessor();
+        Processor processor = new DBStorageProcessor("weather_measurements");
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((line = in.readLine()) != null) {
