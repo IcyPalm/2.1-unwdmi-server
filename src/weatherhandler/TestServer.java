@@ -2,6 +2,7 @@ package weatherhandler;
 
 import weatherhandler.parser.WeatherParser;
 import weatherhandler.processor.Processor;
+import weatherhandler.processor.BatchUpdatesProcessor;
 import weatherhandler.processor.DBStorageProcessor;
 
 import java.io.BufferedReader;
@@ -22,13 +23,19 @@ public class TestServer implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        Processor processor = new BatchUpdatesProcessor(1000,
+                new DBStorageProcessor("weather_measurements"));
+
         while (true) {
             try {
                 socket = TCPsocket.accept();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            new Thread(new ServerHandler(socket)).start();
+
+            Runnable thread = new ServerHandler(socket, processor);
+            new Thread(thread).start();
             System.out.println("New Client");
         }
     }
@@ -42,26 +49,26 @@ public class TestServer implements Runnable {
     }
 }
 
-
 class ServerHandler implements Runnable {
 
     private Socket socket;
+    private Processor processor;
 
-    public ServerHandler(Socket socket) {
+    public ServerHandler(Socket socket, Processor processor) {
         this.socket = socket;
+        this.processor = processor;
     }
 
     @Override
     public void run() {
         String line;
         StringBuilder lines = new StringBuilder();
-        Processor processor = new DBStorageProcessor("weather_measurements");
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while ((line = in.readLine()) != null) {
                 lines.append(line);
                 if (line.contains("</WEATHERDATA>")) {
-                    new WeatherParser(lines.toString(), processor);
+                    new WeatherParser(lines.toString(), this.processor);
                     lines.setLength(0);
                 }
             }
