@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class TestServer implements Runnable {
     private Socket socket;
@@ -24,9 +26,10 @@ public class TestServer implements Runnable {
             e.printStackTrace();
         }
 
-        Processor processor = new BatchUpdatesProcessor(1000,
+        Processor processor = new BatchUpdatesProcessor(3000,
                 new DBStorageProcessor("weather_measurements"));
 
+        int clients = 0;
         while (true) {
             try {
                 socket = TCPsocket.accept();
@@ -36,7 +39,11 @@ public class TestServer implements Runnable {
 
             Runnable thread = new ServerHandler(socket, processor);
             new Thread(thread).start();
-            System.out.println("New Client");
+            clients++;
+            if (clients % 50 == 0) {
+                String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
+                System.out.println("[DEBUG " + time + "] New Client (" + clients + " connected)");
+            }
         }
     }
 
