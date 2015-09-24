@@ -55,19 +55,17 @@ public class DBStorageProcessor implements Processor {
             "  id SERIAL,\n" +
             "  station_id INT,\n" +
             "  time TIMESTAMP,\n" +
-            // All these are VARCHAR(12) TEMPORARILY PLEASE
-            // At least, I hope so! It'd be pretty terrible if they weren't!
-            "  temperature VARCHAR(12),\n" +
-            "  dew_point VARCHAR(12),\n" +
-            "  station_pressure VARCHAR(12),\n" +
-            "  sea_level_pressure VARCHAR(12),\n" +
-            "  visibility VARCHAR(12),\n" +
-            "  wind_speed VARCHAR(12),\n" +
-            "  precipitation VARCHAR(12),\n" +
-            "  snow_depth VARCHAR(12),\n" +
-            "  events VARCHAR(12),\n" +
-            "  cloud_cover VARCHAR(12),\n" +
-            "  wind_direction VARCHAR(12),\n" +
+            "  temperature REAL,\n" +
+            "  dew_point REAL,\n" +
+            "  station_pressure REAL,\n" +
+            "  sea_level_pressure REAL,\n" +
+            "  visibility REAL,\n" +
+            "  wind_speed REAL,\n" +
+            "  precipitation REAL,\n" +
+            "  snow_depth REAL,\n" +
+            "  events VARCHAR(12),\n" + // this VARCHAR(12) is TEMPORARILY PLEASE
+            "  cloud_cover REAL,\n" +
+            "  wind_direction INT,\n" +
             "  PRIMARY KEY (id)\n" +
             ");"
         );
@@ -97,17 +95,17 @@ public class DBStorageProcessor implements Processor {
                     time = new Date();
                 }
                 st.setTimestamp(TIME, new Timestamp(time.getTime()));
-                st.setString(TEMPERATURE, m.getTemperature());
-                st.setString(DEW_POINT, m.getDewPoint());
-                st.setString(STATION_PRESSURE, m.getStationPressure());
-                st.setString(SEA_LEVEL_PRESSURE, m.getSeaLevelPressure());
-                st.setString(VISIBILITY, m.getVisibility());
-                st.setString(WIND_SPEED, m.getWindSpeed());
-                st.setString(PRECIPITATION, m.getPrecipitation());
-                st.setString(SNOW_DEPTH, m.getSnowDepth());
+                st.setFloat(TEMPERATURE, m.getTemperature());
+                st.setFloat(DEW_POINT, m.getDewPoint());
+                st.setFloat(STATION_PRESSURE, m.getStationPressure());
+                st.setFloat(SEA_LEVEL_PRESSURE, m.getSeaLevelPressure());
+                st.setFloat(VISIBILITY, m.getVisibility());
+                st.setFloat(WIND_SPEED, m.getWindSpeed());
+                st.setFloat(PRECIPITATION, m.getPrecipitation());
+                st.setFloat(SNOW_DEPTH, m.getSnowDepth());
                 st.setString(EVENTS, m.getEvents());
-                st.setString(CLOUD_COVER, m.getCloudCover());
-                st.setString(WIND_DIRECTION, m.getWindDirection());
+                st.setFloat(CLOUD_COVER, m.getCloudCover());
+                st.setInt(WIND_DIRECTION, m.getWindDirection());
 
                 st.addBatch();
             }

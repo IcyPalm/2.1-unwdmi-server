@@ -1,7 +1,20 @@
 package weatherhandler.data;
 
 public class Measurement {
-    String station, date, time, temperature, dewPoint, stationPressure, seaLevelPressure, visibility, windSpeed, precipitation, snowDepth, events, cloudCover, windDirection;
+    String station;
+    String date;
+    String time;
+    float temperature;
+    float dewPoint;
+    float stationPressure;
+    float seaLevelPressure;
+    float visibility;
+    float windSpeed;
+    float precipitation;
+    float snowDepth;
+    String events;
+    float cloudCover;
+    int windDirection;
 
     // Getters
     public String getStation() {
@@ -13,37 +26,37 @@ public class Measurement {
     public String getTime() {
         return time;
     }
-    public String getTemperature() {
+    public float getTemperature() {
         return temperature;
     }
-    public String getDewPoint() {
+    public float getDewPoint() {
         return dewPoint;
     }
-    public String getStationPressure() {
+    public float getStationPressure() {
         return stationPressure;
     }
-    public String getSeaLevelPressure() {
+    public float getSeaLevelPressure() {
         return seaLevelPressure;
     }
-    public String getVisibility() {
+    public float getVisibility() {
         return visibility;
     }
-    public String getWindSpeed() {
+    public float getWindSpeed() {
         return windSpeed;
     }
-    public String getPrecipitation() {
+    public float getPrecipitation() {
         return precipitation;
     }
-    public String getSnowDepth() {
+    public float getSnowDepth() {
         return snowDepth;
     }
     public String getEvents() {
         return events;
     }
-    public String getCloudCover() {
+    public float getCloudCover() {
         return cloudCover;
     }
-    public String getWindDirection() {
+    public int getWindDirection() {
         return windDirection;
     }
 
@@ -57,37 +70,37 @@ public class Measurement {
     public void setTime(String time) {
         this.time = time;
     }
-    public void setTemperature(String temperature) {
+    public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
-    public void setDewPoint(String dewPoint) {
+    public void setDewPoint(float dewPoint) {
         this.dewPoint = dewPoint;
     }
-    public void setStationPressure(String stationPressure) {
+    public void setStationPressure(float stationPressure) {
         this.stationPressure = stationPressure;
     }
-    public void setSeaLevelPressure(String seaLevelPressure) {
+    public void setSeaLevelPressure(float seaLevelPressure) {
         this.seaLevelPressure = seaLevelPressure;
     }
-    public void setVisibility(String visibility) {
+    public void setVisibility(float visibility) {
         this.visibility = visibility;
     }
-    public void setWindSpeed(String windSpeed) {
+    public void setWindSpeed(float windSpeed) {
         this.windSpeed = windSpeed;
     }
-    public void setPrecipitation(String precipitation) {
+    public void setPrecipitation(float precipitation) {
         this.precipitation = precipitation;
     }
-    public void setSnowDepth(String snowDepth) {
+    public void setSnowDepth(float snowDepth) {
         this.snowDepth = snowDepth;
     }
     public void setEvents(String events) {
         this.events = events;
     }
-    public void setCloudCover(String cloudCover) {
+    public void setCloudCover(float cloudCover) {
         this.cloudCover = cloudCover;
     }
-    public void setWindDirection(String windDirection) {
+    public void setWindDirection(int windDirection) {
         this.windDirection = windDirection;
     }
 
