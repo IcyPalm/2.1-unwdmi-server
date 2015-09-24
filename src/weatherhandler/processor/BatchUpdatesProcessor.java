@@ -35,16 +35,28 @@ public class BatchUpdatesProcessor implements Processor {
     }
 
     /**
-     * Batch & push new updates.
+     * Concurrently append new items to the current batch. Replace the batch if
+     * the current one is "complete".
      */
-    public void processMeasurements(List<Measurement> measurements) throws ProcessorException {
+    private synchronized List<Measurement> append(List<Measurement> measurements) {
         this.batch.addAll(measurements);
         if (this.batch.size() >= this.batchSize) {
             // Replace batch by a new list immediately, so threads can read from
             // this batch and other threads can write to the next batch
             List<Measurement> current = this.batch;
             this.batch = new ArrayList<Measurement>(this.batchSize + BATCH_BUFFER);
-            this.next.processMeasurements(current);
+            return current;
+        }
+        return null;
+    }
+
+    /**
+     * Batch & push new updates.
+     */
+    public void processMeasurements(List<Measurement> measurements) throws ProcessorException {
+        List<Measurement> nextBatch = this.append(measurements);
+        if (nextBatch != null) {
+            this.next.processMeasurements(nextBatch);
         }
     }
 }
