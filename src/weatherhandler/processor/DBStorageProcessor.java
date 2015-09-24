@@ -5,7 +5,6 @@ import weatherhandler.data.Measurement;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -36,39 +35,10 @@ public class DBStorageProcessor implements Processor {
 
         try {
             this.connection = Database.getConnection();
-            this.dropTableWhileDebugging();
-            this.createTableIfNecessary();
+            Database.createTables();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private void dropTableWhileDebugging() throws SQLException {
-        Statement st = this.connection.createStatement();
-        st.executeUpdate("DROP TABLE IF EXISTS " + this.tableName + ";");
-    }
-
-    private void createTableIfNecessary() throws SQLException {
-        Statement st = this.connection.createStatement();
-        st.executeUpdate(
-            "CREATE TABLE IF NOT EXISTS " + this.tableName + " (\n" +
-            "  id SERIAL,\n" +
-            "  station_id INT,\n" +
-            "  time TIMESTAMP,\n" +
-            "  temperature REAL,\n" +
-            "  dew_point REAL,\n" +
-            "  station_pressure REAL,\n" +
-            "  sea_level_pressure REAL,\n" +
-            "  visibility REAL,\n" +
-            "  wind_speed REAL,\n" +
-            "  precipitation REAL,\n" +
-            "  snow_depth REAL,\n" +
-            "  events VARCHAR(12),\n" + // this VARCHAR(12) is TEMPORARILY PLEASE
-            "  cloud_cover REAL,\n" +
-            "  wind_direction INT,\n" +
-            "  PRIMARY KEY (id)\n" +
-            ");"
-        );
     }
 
     // TODO use Measurements wrapped in WeatherData batch class
