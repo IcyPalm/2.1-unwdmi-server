@@ -1,7 +1,7 @@
 package weatherhandler.data;
 
 public class Measurement {
-    String station;
+    int station;
     String date;
     String time;
     float temperature;
@@ -17,7 +17,7 @@ public class Measurement {
     int windDirection;
 
     // Getters
-    public String getStation() {
+    public int getStation() {
         return station;
     }
     public String getDate() {
@@ -61,7 +61,7 @@ public class Measurement {
     }
 
     // Setters
-    public void setStation(String station) {
+    public void setStation(int station) {
         this.station = station;
     }
     public void setDate(String date) {

@@ -47,7 +47,7 @@ public class WeatherHandler extends DefaultHandler {
         }
         String slice = new String(ch, start, length);
         if (tagName.equalsIgnoreCase("STN")) {
-            mes.setStation(slice);
+            mes.setStation(Integer.parseInt(slice, 10));
         } else if (tagName.equalsIgnoreCase("DATE")) {
             mes.setDate(slice);
         } else if (tagName.equalsIgnoreCase("TIME")) {
@@ -73,7 +73,7 @@ public class WeatherHandler extends DefaultHandler {
         } else if (tagName.equalsIgnoreCase("CLDC") && slice.length() > 0) {
             mes.setCloudCover(Float.parseFloat(slice));
         } else if (tagName.equalsIgnoreCase("WNDDIR") && slice.length() > 0) {
-            mes.setWindDirection(Integer.parseInt(slice));
+            mes.setWindDirection(Integer.parseInt(slice, 10));
         }
     }
 }

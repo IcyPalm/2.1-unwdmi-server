@@ -56,7 +56,7 @@ public class DBStorageProcessor implements Processor {
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (Measurement m : measurements) {
-                st.setInt(STATION_ID, Integer.parseInt(m.getStation(), 10));
+                st.setInt(STATION_ID, m.getStation());
                 Date time;
                 try {
                     time = formatter.parse(m.getDate() + " " + m.getTime());
