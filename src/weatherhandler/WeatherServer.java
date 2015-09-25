@@ -16,7 +16,7 @@ import java.util.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
-public class TestServer implements Runnable {
+public class WeatherServer implements Runnable {
     private Socket socket;
     private ServerSocket TCPsocket;
 
