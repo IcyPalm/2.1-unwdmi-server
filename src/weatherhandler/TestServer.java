@@ -36,7 +36,7 @@ public class TestServer implements Runnable {
             e.printStackTrace();
         }
 
-        Processor processor = new BatchUpdatesProcessor(3000,
+        Processor processor = new BatchUpdatesProcessor(2000,
                 new DBStorageProcessor("weather_measurements"));
 
         int clients = 0;
