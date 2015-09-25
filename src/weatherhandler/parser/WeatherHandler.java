@@ -12,21 +12,6 @@ import weatherhandler.data.Measurement;
 public class WeatherHandler extends DefaultHandler {
     private List<Measurement> measurements = new ArrayList<Measurement>();
 
-    private boolean bSTN = false;
-    private boolean bDATE = false;
-    private boolean bTIME = false;
-    private boolean bTEMP = false;
-    private boolean bDEWP = false;
-    private boolean bSTP = false;
-    private boolean bSLP = false;
-    private boolean bVISIB = false;
-    private boolean bWDSP = false;
-    private boolean bPRCP = false;
-    private boolean bSNDP = false;
-    private boolean bFRSHTT = false;
-    private boolean bCLDC = false;
-    private boolean bWNDDIR = false;
-
     private String tagName = null;
 
     private Measurement mes = null;
