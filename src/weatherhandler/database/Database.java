@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.util.stream.Stream;
 
 public class Database {
     // #Hardcoded
@@ -117,6 +116,7 @@ public class Database {
                 st.addBatch();
             }
             st.executeBatch();
+            lines.close();
         } catch (IOException e) {
             System.err.println("Could not seed stations table.");
             e.printStackTrace();
