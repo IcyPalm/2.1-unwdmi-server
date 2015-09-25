@@ -4,6 +4,7 @@ import weatherhandler.data.MeasurementsCache;
 import weatherhandler.parser.WeatherParser;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.BatchUpdatesProcessor;
+import weatherhandler.processor.CompleteMissingProcessor;
 import weatherhandler.processor.DBStorageProcessor;
 
 import java.io.BufferedReader;
@@ -46,7 +47,8 @@ public class TestServer implements Runnable {
                 e.printStackTrace();
             }
 
-            Runnable thread = new ServerHandler(socket, processor);
+            Runnable thread = new ServerHandler(socket,
+                new CompleteMissingProcessor(30, processor));
             new Thread(thread).start();
             clients++;
             if (clients % 50 == 0) {
