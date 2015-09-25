@@ -18,6 +18,8 @@ public class MeasurementsCache {
         ResultSet rs = st.executeQuery("SELECT id FROM stations");
         while (rs.next()) {
             int station = rs.getInt(1);
+            // TODO use a custom List class that also updates averages for every
+            // data point whenever a new Measurement is added
             cache.put(station, new LinkedList<Measurement>());
         }
     }
