@@ -1,8 +1,10 @@
 package weatherhandler;
 
+import weatherhandler.data.MeasurementsCache;
 import weatherhandler.parser.WeatherParser;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.BatchUpdatesProcessor;
+import weatherhandler.processor.CompleteMissingProcessor;
 import weatherhandler.processor.DBStorageProcessor;
 
 import java.io.BufferedReader;
@@ -11,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
 public class TestServer implements Runnable {
@@ -19,6 +22,13 @@ public class TestServer implements Runnable {
 
     @Override
     public void run() {
+        try {
+            MeasurementsCache.init();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         System.out.println("Server started");
         try {
             TCPsocket = new ServerSocket(7789);
@@ -37,7 +47,8 @@ public class TestServer implements Runnable {
                 e.printStackTrace();
             }
 
-            Runnable thread = new ServerHandler(socket, processor);
+            Runnable thread = new ServerHandler(socket,
+                new CompleteMissingProcessor(30, processor));
             new Thread(thread).start();
             clients++;
             if (clients % 50 == 0) {
