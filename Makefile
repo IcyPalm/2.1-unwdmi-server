@@ -13,14 +13,14 @@ all: build
 # Building source
 build:
 	mkdir -p bin
-	javac -d bin -sourcepath src src/weatherhandler/Serverstarter.java
+	javac -d bin -sourcepath src src/weatherhandler/ServerStarter.java
 
 # Ensures stuff is built before running it
 run: build
 	# TODO don't hardcode this, dummy
 	# I don't really know how java classpath config works, it seems really shit
 	# to have to manually set this as a user though >_>
-	java -classpath bin:/usr/share/java/postgresql-jdbc4.jar weatherhandler.Serverstarter
+	java -classpath bin:/usr/share/java/postgresql-jdbc4.jar weatherhandler.ServerStarter
 
 opendb:
 	psql weatherhandler -h 127.0.0.1 -d weatherhandler
