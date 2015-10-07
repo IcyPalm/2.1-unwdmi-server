@@ -58,35 +58,24 @@ public class CompleteMissingProcessor implements Processor {
         for (Measurement m : measurements) {
             List<Measurement> prev = MeasurementsCache.getCache(m.getStation());
             synchronized(prev) {
-                // TODO clean this up slightly, somehow…
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getTemperature(),
-                    (measurement, temp) -> measurement.setTemperature(temp));
+                    Measurement::getTemperature, Measurement::setTemperature);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getDewPoint(),
-                    (measurement, dewp) -> measurement.setDewPoint(dewp));
+                    Measurement::getDewPoint, Measurement::setDewPoint);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getStationPressure(),
-                    (measurement, stp) -> measurement.setStationPressure(stp));
+                    Measurement::getStationPressure, Measurement::setStationPressure);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getSeaLevelPressure(),
-                    (measurement, slp) -> measurement.setSeaLevelPressure(slp));
+                    Measurement::getSeaLevelPressure, Measurement::setSeaLevelPressure);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getVisibility(),
-                    (measurement, vis) -> measurement.setVisibility(vis));
+                    Measurement::getVisibility, Measurement::setVisibility);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getWindSpeed(),
-                    (measurement, wind) -> measurement.setWindSpeed(wind));
+                    Measurement::getWindSpeed, Measurement::setWindSpeed);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getPrecipitation(),
-                    (measurement, prec) -> measurement.setPrecipitation(prec));
+                    Measurement::getPrecipitation, Measurement::setPrecipitation);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getSnowDepth(),
-                    (measurement, snow) -> measurement.setSnowDepth(snow));
+                    Measurement::getSnowDepth, Measurement::setSnowDepth);
                 this.replaceIfNecessary(m, prev,
-                    p -> p.getCloudCover(),
-                    // https://www.youtube.com/watch?v=9GOCwqSeRLs
-                    (measurement, clc) -> measurement.setCloudCover(clc));
+                    Measurement::getCloudCover, Measurement::setCloudCover);
                 // Wind Direction is stored as an integer, so we "floatify" it
                 // when mapping and round it to an integer when storing it.
                 this.replaceIfNecessary(m, prev,
