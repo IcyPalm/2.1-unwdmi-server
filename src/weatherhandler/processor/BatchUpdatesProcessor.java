@@ -2,10 +2,9 @@ package weatherhandler.processor;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 
 import weatherhandler.data.Measurement;
+import weatherhandler.Logger;
 
 /**
  * Processor that batches updates together in larger chunks for possibly quicker
@@ -26,6 +25,9 @@ public class BatchUpdatesProcessor implements Processor {
     private List<Measurement> batch;
     // Processor to pass batched data to
     private Processor next;
+
+    // For printing a log line every batch
+    private Logger logger = new Logger("BatchUpdates");
 
     public BatchUpdatesProcessor(Processor next) {
         this(DEFAULT_BATCH_SIZE, next);
@@ -58,8 +60,7 @@ public class BatchUpdatesProcessor implements Processor {
     public void processMeasurements(List<Measurement> measurements) throws ProcessorException {
         List<Measurement> nextBatch = this.append(measurements);
         if (nextBatch != null) {
-            String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
-            System.out.println("[DEBUG " + time + "] BatchUpdates: pushing " + nextBatch.size() + " measurements");
+            this.logger.debug("pushing " + nextBatch.size() + " measurements");
             this.next.processMeasurements(nextBatch);
         }
     }

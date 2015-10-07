@@ -12,10 +12,13 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import weatherhandler.data.Measurement;
+import weatherhandler.Logger;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.ProcessorException;
 
 public class WeatherParser {
+    private Logger logger = new Logger("WeatherParser");
+
     public WeatherParser(String input, Processor out) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
@@ -27,7 +30,7 @@ public class WeatherParser {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         } catch (ProcessorException e) {
-            System.out.println("Processor error:");
+            logger.error("Processor error:");
             e.printStackTrace();
         }
     }

@@ -1,5 +1,7 @@
 package weatherhandler.database;
 
+import weatherhandler.Logger;
+
 import java.lang.ClassNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -20,6 +22,8 @@ public class Database {
     private static Connection connection = null;
     private static boolean createdTables = false;
 
+    private static Logger logger = new Logger("Database");
+
     /**
      * Initialize a database connection.
      */
@@ -30,7 +34,7 @@ public class Database {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
-            System.err.println("PostgreSQL driver not found. Stack trace:");
+            logger.error("PostgreSQL driver not found. Stack trace:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -118,7 +122,7 @@ public class Database {
             st.executeBatch();
             lines.close();
         } catch (IOException e) {
-            System.err.println("Could not seed stations table.");
+            logger.error("Could not seed stations table.");
             e.printStackTrace();
             System.exit(1);
         }

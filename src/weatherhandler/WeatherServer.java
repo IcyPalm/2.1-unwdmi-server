@@ -1,6 +1,7 @@
 package weatherhandler;
 
 import weatherhandler.data.MeasurementsCache;
+import weatherhandler.Logger;
 import weatherhandler.parser.WeatherParser;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.BatchUpdatesProcessor;
@@ -12,13 +13,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Date;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 
 public class WeatherServer implements Runnable {
     private Socket socket;
     private ServerSocket TCPsocket;
+    private Logger logger = new Logger("Server");
 
     @Override
     public void run() {
@@ -29,7 +29,7 @@ public class WeatherServer implements Runnable {
             System.exit(1);
         }
 
-        System.out.println("Server started");
+        this.logger.info("Server started");
         try {
             TCPsocket = new ServerSocket(7789);
         } catch (IOException e) {
@@ -52,8 +52,7 @@ public class WeatherServer implements Runnable {
             new Thread(thread).start();
             clients++;
             if (clients % 50 == 0) {
-                String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
-                System.out.println("[DEBUG " + time + "] New Client (" + clients + " connected)");
+                this.logger.debug("New Client (" + clients + " connected)");
             }
         }
     }
