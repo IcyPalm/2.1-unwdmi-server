@@ -7,6 +7,7 @@ import weatherhandler.processor.Processor;
 import weatherhandler.processor.BatchUpdatesProcessor;
 import weatherhandler.processor.CompleteMissingProcessor;
 import weatherhandler.processor.DBStorageProcessor;
+import weatherhandler.processor.UpdatesMonitor;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -36,8 +37,9 @@ public class WeatherServer implements Runnable {
             e.printStackTrace();
         }
 
-        Processor processor = new BatchUpdatesProcessor(2000,
-                new DBStorageProcessor("weather_measurements"));
+        Processor processor = new UpdatesMonitor(5000,
+            new BatchUpdatesProcessor(2000,
+                new DBStorageProcessor("weather_measurements")));
 
         int clients = 0;
         while (true) {
