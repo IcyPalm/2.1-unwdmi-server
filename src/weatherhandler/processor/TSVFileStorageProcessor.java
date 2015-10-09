@@ -47,7 +47,7 @@ public class TSVFileStorageProcessor implements Processor {
         });
     }
 
-    public void processMeasurements(List<Measurement> measurements) throws ProcessorException {
+    public synchronized void processMeasurements(List<Measurement> measurements) throws ProcessorException {
         try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(this.fileName, true)))) {
             for (Measurement m : measurements) {
                 out.println(this.toTSV(m));
