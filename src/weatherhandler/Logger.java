@@ -18,7 +18,7 @@ public class Logger {
 
     private void log(String level, String[] text) {
         String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
-        System.out.println(
+        System.err.println(
             "[" + level + " " + time + "] " +
             this.name + ": " + String.join(" ", text)
         );
