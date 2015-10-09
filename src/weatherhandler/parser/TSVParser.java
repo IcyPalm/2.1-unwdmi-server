@@ -15,21 +15,43 @@ import weatherhandler.Logger;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.ProcessorException;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * TSVParser is a class that processes Tab Separated Value files containing
+ * measurement data.
+ * 
+ */
 public class TSVParser implements AutoCloseable {
     private Logger logger = new Logger("TSVParser");
     private BufferedReader reader;
     private Stream<String> stream;
     private Processor output;
 
+    /**
+     * Create a new TSVParser with a filename
+     * @param fileName The File you want to read from
+     * @param out The processor that will receive the data
+     * @throws FileNotFoundException if the file is not found
+     */
     public TSVParser(String fileName, Processor out) throws FileNotFoundException {
         this(new FileReader(fileName), out);
     }
+    /**
+     * Create a new TSVParser with a buffered reader instead of a file
+     * @param reader the input reader
+     * @param out The processor that will receive the data
+     */
     public TSVParser(Reader reader, Processor out) {
         this.reader = new BufferedReader(reader);
         this.stream = this.reader.lines();
         this.output = out;
     }
 
+    /**
+     * Process the given TSV data
+     */
     public void process() {
         this.stream
             .map(this::parse)

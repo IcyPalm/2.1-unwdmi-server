@@ -9,6 +9,13 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import weatherhandler.data.Measurement;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * This class is extended from DefaultHandler and parses received XML data
+ * 
+ */
 public class WeatherHandler extends DefaultHandler {
     private List<Measurement> measurements = new ArrayList<Measurement>();
 
@@ -16,6 +23,9 @@ public class WeatherHandler extends DefaultHandler {
 
     private Measurement mes = null;
 
+    /**
+     * @return The list of Measurements
+     */
     public List<Measurement> getList() {
         return measurements;
     }
