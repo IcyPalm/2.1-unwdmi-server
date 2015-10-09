@@ -6,6 +6,7 @@ import java.util.function.ToDoubleFunction;
 import java.lang.AutoCloseable;
 
 import weatherhandler.data.Measurement;
+import weatherhandler.data.Stations;
 import weatherhandler.Logger;
 
 /**
@@ -57,6 +58,16 @@ public class AverageQuery<T> extends NumericGroupedQuery<T> implements AutoClose
     public static AverageQuery<Integer> temperatureByStation() {
         return new AverageQuery<>(
             m -> m.getStation(),
+            Measurement::getTemperature
+        );
+    }
+
+    /**
+     * @return Query that computes the average temperature for every country.
+     */
+    public static AverageQuery<String> temperatureByCountry() {
+        return new AverageQuery<>(
+            m -> Stations.getStation(m.getStation()).getCountry(),
             Measurement::getTemperature
         );
     }
