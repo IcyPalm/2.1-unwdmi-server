@@ -24,6 +24,13 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * WeatherServer will open a ServerSocket on port 7789 
+ * and wait for any incoming weatherstation connections
+ */
 public class WeatherServer implements Runnable {
     final public static int SERVER_PORT = 7789;
 
@@ -38,6 +45,7 @@ public class WeatherServer implements Runnable {
 
     @Override
     public void run() {
+        //Load the StationList from File
         Stations.loadFromTSV("./stations.tsv");
         MeasurementsCache.init();
 
@@ -89,6 +97,7 @@ public class WeatherServer implements Runnable {
                 System.exit(1);
             }
         } else {
+
             try {
                 TCPsocket = new ServerSocket(SERVER_PORT);
             } catch (IOException e) {
@@ -116,6 +125,9 @@ public class WeatherServer implements Runnable {
         }
     }
 
+    /**
+     * Close ServerSocket
+     */
     public void interrupt() {
         try {
             TCPsocket.close();
@@ -141,8 +153,10 @@ class ServerHandler implements Runnable {
         StringBuilder lines = new StringBuilder();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            //Read data client sends to server
             while ((line = in.readLine()) != null) {
                 lines.append(line);
+                // if </WEATHERDATA> is encountered close document and create new Parser.
                 if (line.contains("</WEATHERDATA>")) {
                     new WeatherParser(lines.toString(), this.processor);
                     lines.setLength(0);
