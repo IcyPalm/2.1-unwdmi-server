@@ -11,14 +11,32 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import weatherhandler.data.Measurement;
 import weatherhandler.Logger;
+import weatherhandler.data.Measurement;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.ProcessorException;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ *         The WeatherParser will receive XML input and parse it into
+ *         Measurements It is SAX based so that if the XML is not 100% valid it
+ *         will still parse. Another reason for SAX is the lighter RAM use over
+ *         DOM
+ * 
+ */
 public class WeatherParser {
     private Logger logger = new Logger("WeatherParser");
 
+    /**
+     * Create a new WeatherParser and immediately parse the data
+     * 
+     * @param input
+     *            The input String containing the XML data
+     * @param out
+     *            The Processor that will receive the data
+     */
     public WeatherParser(String input, Processor out) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
@@ -35,4 +53,3 @@ public class WeatherParser {
         }
     }
 }
-

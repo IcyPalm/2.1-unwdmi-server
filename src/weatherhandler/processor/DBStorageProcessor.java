@@ -1,8 +1,5 @@
 package weatherhandler.processor;
 
-import weatherhandler.database.Database;
-import weatherhandler.data.Measurement;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -12,6 +9,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import weatherhandler.data.Measurement;
+import weatherhandler.database.Database;
+
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ *         This class will receive processed measurements and insert them into
+ *         the database
+ */
 public class DBStorageProcessor implements Processor {
     final private static int STATION_ID = 1;
     final private static int TIME = 2;
@@ -30,6 +37,13 @@ public class DBStorageProcessor implements Processor {
     private Connection connection;
     private String tableName;
 
+    /**
+     * Create a new {@link DBStorageProcessor} that will enter measurements in
+     * the table
+     * 
+     * @param tableName
+     *            The Table name that is used to store the measurements
+     */
     public DBStorageProcessor(String tableName) {
         this.tableName = tableName;
 
@@ -44,15 +58,10 @@ public class DBStorageProcessor implements Processor {
     // TODO use Measurements wrapped in WeatherData batch class
     public void processMeasurements(List<Measurement> measurements) throws ProcessorException {
         try {
-            PreparedStatement st = this.connection.prepareStatement(
-                "INSERT INTO " + this.tableName + " (" +
-                    "station_id, time, temperature, dew_point, station_pressure, sea_level_pressure, " +
-                    "visibility, wind_speed, precipitation, snow_depth, events, cloud_cover, wind_direction" +
-                ") VALUES (" +
-                    "?, ?, ?, ?, ?, ?, " +
-                    "?, ?, ?, ?, ?, ?, ?" +
-                ")"
-            );
+            PreparedStatement st = this.connection.prepareStatement("INSERT INTO " + this.tableName + " ("
+                    + "station_id, time, temperature, dew_point, station_pressure, sea_level_pressure, "
+                    + "visibility, wind_speed, precipitation, snow_depth, events, cloud_cover, wind_direction"
+                    + ") VALUES (" + "?, ?, ?, ?, ?, ?, " + "?, ?, ?, ?, ?, ?, ?" + ")");
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (Measurement m : measurements) {

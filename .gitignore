@@ -32,3 +32,4 @@ local.properties
 
 # Mac
 .DS_Store
+measurements.tsv

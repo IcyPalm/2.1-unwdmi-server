@@ -7,6 +7,46 @@ Projectje over verwerking van weergegevens.
 
 :rainbow: :sunny: :cloud: :umbrella: :snowflake: :rainbow:
 
+## Building
+
+```
+make build
+```
+
+## Running
+
+The app is basically nothing more than a chain of processors with different
+sources and endpoints.
+
+Listen for clients pushing XML weather data and store in postgres DB or a file:
+
+```
+./run --save postgres # default table is "weather_measurements"
+./run --save postgres --table my_own_table # table is created if necessary
+./run --save tsv --file measurements.tsv # file is created if necessary
+```
+
+> Optionally, you can also add `--batch 5000` to the above commands to change
+  the batch size, or `--batch 0` to disable batching altogether. Default batch
+  size is 2000 measurements.
+
+> Optionally, you can also add `--monitor 2` to change the Updates Monitor
+  interval, or `--monitor 0` to disable processing speed monitoring altogether.
+  The default interval is 5 seconds.
+
+Query data from a TSV file, outputting results as TSV, too:
+
+```
+./run --load measurements.tsv --query avg:temperatureByCountry
+./run --load measurements.tsv --query min:temperature
+```
+
+Copying data from a TSV file to a database:
+
+```
+./run --load measurements.tsv --save postgres --table tsv_backup
+```
+
 ## Nuttige Git-shit
 
 Haal repo binnen met de SSH Clone URL, als het goed is staan je remotes meteen

@@ -1,29 +1,36 @@
 package weatherhandler.data;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.HashMap;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-import weatherhandler.database.Database;
-
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ *         MeasurementCache will create a LinkedList of Measurements for every
+ *         station that exists
+ */
 public class MeasurementsCache {
     private static Map<Integer, List<Measurement>> cache = new HashMap<>();
 
-    public static void init() throws SQLException {
-        Statement st = Database.getConnection().createStatement();
-        ResultSet rs = st.executeQuery("SELECT id FROM stations");
-        while (rs.next()) {
-            int station = rs.getInt(1);
+    /**
+     * Init the MeasurementCache
+     */
+    public static void init() {
+        for (Station station : Stations.getStations()) {
             // TODO use a custom List class that also updates averages for every
             // data point whenever a new Measurement is added
-            cache.put(station, new LinkedList<Measurement>());
+            cache.put(station.getID(), new LinkedList<Measurement>());
         }
     }
 
+    /**
+     * @param station
+     *            The station ID for the list that is returned
+     * @return The List of Measurements that is returned based on the station ID
+     */
     public static List<Measurement> getCache(Integer station) {
         return cache.get(station);
     }

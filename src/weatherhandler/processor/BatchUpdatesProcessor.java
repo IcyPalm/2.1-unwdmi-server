@@ -1,16 +1,19 @@
 package weatherhandler.processor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import weatherhandler.data.Measurement;
 import weatherhandler.Logger;
+import weatherhandler.data.Measurement;
 
 /**
- * Processor that batches updates together in larger chunks for possibly quicker
- * further processing. It does _NOT_ guarantee that exactly `batchSize` updates
- * are passed through--just that _AT LEAST_ `batchSize` updates are passed
- * through to the next processor.
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ *         Processor that batches updates together in larger chunks for possibly
+ *         quicker further processing. It does _NOT_ guarantee that exactly
+ *         `batchSize` updates are passed through--just that _AT LEAST_
+ *         `batchSize` updates are passed through to the next processor.
  */
 public class BatchUpdatesProcessor implements Processor {
     // Default amount of measurements per batch
@@ -29,9 +32,24 @@ public class BatchUpdatesProcessor implements Processor {
     // For printing a log line every batch
     private Logger logger = new Logger("BatchUpdates");
 
+    /**
+     * Create a new BatchUpdate Processor with the default batch size(1000)
+     * 
+     * @param next
+     *            The Processor that will take the data and parse it.
+     */
     public BatchUpdatesProcessor(Processor next) {
         this(DEFAULT_BATCH_SIZE, next);
     }
+
+    /**
+     * Create a new BatchUpdate Processor with the default batch size(1000)
+     * 
+     * @param batchSize
+     *            The size of the batch that should be gathered
+     * @param next
+     *            The Processor that will take the data and parse it.
+     */
     public BatchUpdatesProcessor(int batchSize, Processor next) {
         this.next = next;
         this.batchSize = batchSize;
