@@ -1,17 +1,16 @@
 package weatherhandler.parser;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.lang.AutoCloseable;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
-import weatherhandler.data.Measurement;
 import weatherhandler.Logger;
+import weatherhandler.data.Measurement;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.ProcessorException;
 
@@ -19,8 +18,8 @@ import weatherhandler.processor.ProcessorException;
  * @author Marijn Pool
  * @author René Kooi
  * 
- * TSVParser is a class that processes Tab Separated Value files containing
- * measurement data.
+ *         TSVParser is a class that processes Tab Separated Value files
+ *         containing measurement data.
  * 
  */
 public class TSVParser implements AutoCloseable {
@@ -31,17 +30,25 @@ public class TSVParser implements AutoCloseable {
 
     /**
      * Create a new TSVParser with a filename
-     * @param fileName The File you want to read from
-     * @param out The processor that will receive the data
-     * @throws FileNotFoundException if the file is not found
+     * 
+     * @param fileName
+     *            The File you want to read from
+     * @param out
+     *            The processor that will receive the data
+     * @throws FileNotFoundException
+     *             if the file is not found
      */
     public TSVParser(String fileName, Processor out) throws FileNotFoundException {
         this(new FileReader(fileName), out);
     }
+
     /**
      * Create a new TSVParser with a buffered reader instead of a file
-     * @param reader the input reader
-     * @param out The processor that will receive the data
+     * 
+     * @param reader
+     *            the input reader
+     * @param out
+     *            The processor that will receive the data
      */
     public TSVParser(Reader reader, Processor out) {
         this.reader = new BufferedReader(reader);
@@ -53,10 +60,7 @@ public class TSVParser implements AutoCloseable {
      * Process the given TSV data
      */
     public void process() {
-        this.stream
-            .map(this::parse)
-            .map(this::toList)
-            .forEach(this::processMeasurements);
+        this.stream.map(this::parse).map(this::toList).forEach(this::processMeasurements);
         this.done();
     }
 

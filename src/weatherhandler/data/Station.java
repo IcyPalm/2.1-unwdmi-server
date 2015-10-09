@@ -4,8 +4,8 @@ package weatherhandler.data;
  * @author Marijn Pool
  * @author René Kooi
  * 
- * Measurement is a representation of one measurement of a weather station.
- * This class is purely a dataclass
+ *         Measurement is a representation of one measurement of a weather
+ *         station. This class is purely a dataclass
  */
 @SuppressWarnings("javadoc")
 public class Station {
@@ -17,22 +17,27 @@ public class Station {
     float elevation;
 
     // Getters
-    
+
     public int getID() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public String getCountry() {
         return country;
     }
+
     public float getLatitude() {
         return latitude;
     }
+
     public float getLongitude() {
         return longitude;
     }
+
     public float getElevation() {
         return elevation;
     }
@@ -41,24 +46,30 @@ public class Station {
     public void setID(int id) {
         this.id = id;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public void setCountry(String country) {
         this.country = country;
     }
+
     public void setLatitude(float latitude) {
         this.latitude = latitude;
     }
+
     public void setLongitude(float longitude) {
         this.longitude = longitude;
     }
+
     public void setElevation(float elevation) {
         this.elevation = elevation;
     }
 
     /**
      * Creates a XML entry of this station, including TABS
+     * 
      * @return XML of this Station
      */
     public String toXML() {

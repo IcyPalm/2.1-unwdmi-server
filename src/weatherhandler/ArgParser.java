@@ -1,14 +1,14 @@
 package weatherhandler;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  *
- * Rudimentary argument parser. Parses "--key value" style arguments and nothing
- * else.
+ *         Rudimentary argument parser. Parses "--key value" style arguments and
+ *         nothing else.
  */
 public class ArgParser {
     /**
@@ -24,7 +24,8 @@ public class ArgParser {
     /**
      * Initialise argument parser.
      *
-     * @param args Argument strings as passed by the OS.
+     * @param args
+     *            Argument strings as passed by the OS.
      */
     public ArgParser(String[] args) {
         this.args = args;
@@ -32,16 +33,15 @@ public class ArgParser {
 
     /**
      * Parses argument strings into a key→value map.
+     * 
+     * @return A map with the arguments
      */
     public Map<String, String> parse() {
         this.parsed = new HashMap<>();
         for (int i = 0, l = args.length; i < l; i++) {
             String arg = args[i];
             if (arg.startsWith("--")) {
-                this.parsed.put(
-                    arg.substring(2),
-                    args[i + 1]
-                );
+                this.parsed.put(arg.substring(2), args[i + 1]);
                 i++;
             } else {
                 System.err.println("Unknown command line parameter \"" + arg + "\"");

@@ -1,38 +1,37 @@
 package weatherhandler;
 
-import weatherhandler.data.MeasurementsCache;
-import weatherhandler.data.Stations;
-import weatherhandler.Logger;
-import weatherhandler.parser.TSVParser;
-import weatherhandler.parser.WeatherParser;
-import weatherhandler.processor.Processor;
-import weatherhandler.processor.BatchUpdatesProcessor;
-import weatherhandler.processor.CompleteMissingProcessor;
-import weatherhandler.processor.DBStorageProcessor;
-import weatherhandler.processor.NullProcessor;
-import weatherhandler.processor.TSVFileStorageProcessor;
-import weatherhandler.processor.UpdatesMonitor;
-
-import weatherhandler.processor.query.AverageQuery;
-import weatherhandler.processor.query.MinQuery;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.Map;
 
+import weatherhandler.data.MeasurementsCache;
+import weatherhandler.data.Stations;
+import weatherhandler.parser.TSVParser;
+import weatherhandler.parser.WeatherParser;
+import weatherhandler.processor.BatchUpdatesProcessor;
+import weatherhandler.processor.CompleteMissingProcessor;
+import weatherhandler.processor.DBStorageProcessor;
+import weatherhandler.processor.NullProcessor;
+import weatherhandler.processor.Processor;
+import weatherhandler.processor.TSVFileStorageProcessor;
+import weatherhandler.processor.UpdatesMonitor;
+import weatherhandler.processor.query.AverageQuery;
+import weatherhandler.processor.query.MinQuery;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  * 
- * WeatherServer will open a ServerSocket on port 7789 
- * and wait for any incoming weatherstation connections
+ *         WeatherServer will open a ServerSocket on port 7789 and wait for any
+ *         incoming weatherstation connections
  */
 public class WeatherServer implements Runnable {
+    /**
+     * The Server port
+     */
     final public static int SERVER_PORT = 7789;
 
     private Map<String, String> options;
@@ -40,13 +39,20 @@ public class WeatherServer implements Runnable {
     private ServerSocket TCPsocket;
     private Logger logger = new Logger("Server");
 
+    /**
+     * Constructor for the {@link WeatherServer} with the option to give params
+     * 
+     * @param options
+     *            The params that are passed from {@link ServerStarter}
+     */
     public WeatherServer(Map<String, String> options) {
         this.options = options;
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void run() {
-        //Load the StationList from File
+        // Load the StationList from File
         Stations.loadFromTSV("./stations.tsv");
         MeasurementsCache.init();
 
@@ -57,18 +63,18 @@ public class WeatherServer implements Runnable {
         Processor processor = new NullProcessor();
         if (options.containsKey("save")) {
             processor = this.options.get("save").equalsIgnoreCase("postgres")
-                      ? new DBStorageProcessor(options.getOrDefault("table", "weather_measurements"))
-                      : new TSVFileStorageProcessor(options.getOrDefault("file", "measurements.tsv"));
+                    ? new DBStorageProcessor(options.getOrDefault("table", "weather_measurements"))
+                            : new TSVFileStorageProcessor(options.getOrDefault("file", "measurements.tsv"));
 
-            int batchSize = Integer.parseInt(options.getOrDefault("batch", "2000"), 10);
-            if (batchSize > 0) {
-                processor = new BatchUpdatesProcessor(batchSize, processor);
-            }
+                    int batchSize = Integer.parseInt(options.getOrDefault("batch", "2000"), 10);
+                    if (batchSize > 0) {
+                        processor = new BatchUpdatesProcessor(batchSize, processor);
+                    }
 
-            int monitorInterval = Integer.parseInt(options.getOrDefault("monitor", "5"), 10);
-            if (monitorInterval > 0) {
-                processor = new UpdatesMonitor(monitorInterval * 1000, processor);
-            }
+                    int monitorInterval = Integer.parseInt(options.getOrDefault("monitor", "5"), 10);
+                    if (monitorInterval > 0) {
+                        processor = new UpdatesMonitor(monitorInterval * 1000, processor);
+                    }
         } else if (options.containsKey("query")) {
             switch (options.get("query")) {
             case "avg:temperatureByStation":
@@ -115,8 +121,7 @@ public class WeatherServer implements Runnable {
                     e.printStackTrace();
                 }
 
-                Runnable thread = new ServerHandler(socket,
-                    new CompleteMissingProcessor(30, processor));
+                Runnable thread = new ServerHandler(socket, new CompleteMissingProcessor(30, processor));
                 new Thread(thread).start();
                 clients++;
                 if (clients % 50 == 0) {
@@ -154,10 +159,11 @@ class ServerHandler implements Runnable {
         StringBuilder lines = new StringBuilder();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //Read data client sends to server
+            // Read data client sends to server
             while ((line = in.readLine()) != null) {
                 lines.append(line);
-                // if </WEATHERDATA> is encountered close document and create new Parser.
+                // if </WEATHERDATA> is encountered close document and create
+                // new Parser.
                 if (line.contains("</WEATHERDATA>")) {
                     new WeatherParser(lines.toString(), this.processor);
                     lines.setLength(0);

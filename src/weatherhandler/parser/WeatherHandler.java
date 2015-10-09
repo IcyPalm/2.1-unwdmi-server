@@ -13,7 +13,8 @@ import weatherhandler.data.Measurement;
  * @author Marijn Pool
  * @author René Kooi
  * 
- * This class is extended from DefaultHandler and parses received XML data
+ *         This class is extended from DefaultHandler and parses received XML
+ *         data
  * 
  */
 public class WeatherHandler extends DefaultHandler {
@@ -31,10 +32,9 @@ public class WeatherHandler extends DefaultHandler {
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, Attributes attributes)
-            throws SAXException {
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.equalsIgnoreCase("MEASUREMENT")) {
-            //initialize Measurement object
+            // initialize Measurement object
             mes = new Measurement();
         } else {
             this.tagName = qName;
@@ -44,7 +44,7 @@ public class WeatherHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (qName.equalsIgnoreCase("MEASUREMENT")) {
-            //add Measurement object to list
+            // add Measurement object to list
             measurements.add(mes);
         }
         this.tagName = null;

@@ -1,27 +1,24 @@
 package weatherhandler.data;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.HashMap;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import weatherhandler.data.Station;
-import weatherhandler.database.Database;
 import weatherhandler.Logger;
+import weatherhandler.database.Database;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  * 
- * This class will contain a list of all available Stations
- * Can be loaded from database or TSV
+ *         This class will contain a list of all available Stations Can be
+ *         loaded from database or TSV
  */
 public class Stations {
     private static Map<Integer, Station> stations = new HashMap<>();
@@ -29,7 +26,9 @@ public class Stations {
 
     /**
      * Return the requested station from list
-     * @param id the requested station ID
+     * 
+     * @param id
+     *            the requested station ID
      * @return The requested {@link Station}
      */
     public static Station getStation(int id) {
@@ -45,7 +44,9 @@ public class Stations {
 
     /**
      * Create a collection of Stations from a TSV file
-     * @param fileName the file containing all stations in TSV format
+     * 
+     * @param fileName
+     *            the file containing all stations in TSV format
      */
     public static void loadFromTSV(String fileName) {
         try (BufferedReader lines = new BufferedReader(new FileReader(fileName))) {

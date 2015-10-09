@@ -2,28 +2,31 @@ package weatherhandler.processor.query;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
-import weatherhandler.data.Measurement;
 import weatherhandler.Logger;
+import weatherhandler.data.Measurement;
 import weatherhandler.processor.EachProcessor;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  *
- * Abstract class for building grouped queries, similar to SQL GROUP BY. Output
- * is sent to an OutputStream in TSV format. Implementors need to implement
- * the grouping logic and the mapping logic (i.e. deriving a useful value from
- * measurements).
+ *         Abstract class for building grouped queries, similar to SQL GROUP BY.
+ *         Output is sent to an OutputStream in TSV format. Implementors need to
+ *         implement the grouping logic and the mapping logic (i.e. deriving a
+ *         useful value from measurements).
  *
- * <T> is the type of the *group key*. This will probably usually be Integer,
- * but it might be different for eg. grouping by the location of stations.
+ *         <T> is the type of the *group key*. This will probably usually be
+ *         Integer, but it might be different for eg. grouping by the location
+ *         of stations.
  *
- * (It's basically MapReduce.)
+ *         (It's basically MapReduce.)
+ * @param <T>
+ *            Type
  */
 public abstract class NumericGroupedQuery<T> extends EachProcessor {
     /**
@@ -54,16 +57,16 @@ public abstract class NumericGroupedQuery<T> extends EachProcessor {
     /**
      * Create a new Query, directing output to the given output stream.
      *
-     * @param out Output stream.
-     * @param grouper Function that returns a group key for a given measurement.
-     * @param mapper Function that returns the number to use for this query's
-     *               computation.
+     * @param out
+     *            Output stream.
+     * @param grouper
+     *            Function that returns a group key for a given measurement.
+     * @param mapper
+     *            Function that returns the number to use for this query's
+     *            computation.
      */
-    public NumericGroupedQuery(
-        OutputStream out,
-        Function<Measurement, T> grouper,
-        ToDoubleFunction<Measurement> mapper
-    ) {
+    public NumericGroupedQuery(OutputStream out, Function<Measurement, T> grouper,
+            ToDoubleFunction<Measurement> mapper) {
         this.output = new PrintStream(out);
         this.grouper = grouper;
         this.mapper = mapper;
@@ -72,14 +75,13 @@ public abstract class NumericGroupedQuery<T> extends EachProcessor {
     /**
      * Create a new AverageQuery, directing output to standard output.
      *
-     * @param grouper Function that returns a group key for a given measurement.
-     * @param mapper Function that returns the number to use for the average
-     *               computation.
+     * @param grouper
+     *            Function that returns a group key for a given measurement.
+     * @param mapper
+     *            Function that returns the number to use for the average
+     *            computation.
      */
-    public NumericGroupedQuery(
-        Function<Measurement, T> grouper,
-        ToDoubleFunction<Measurement> mapper
-    ) {
+    public NumericGroupedQuery(Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
         this.output = System.out;
         this.grouper = grouper;
         this.mapper = mapper;
@@ -92,14 +94,13 @@ public abstract class NumericGroupedQuery<T> extends EachProcessor {
     protected abstract Group newGroup();
 
     /**
-     * Process a new measurement, adding its mapped value  to the relevant
-     * group.
+     * Process a new measurement, adding its mapped value to the relevant group.
      *
-     * @param m Measurement.
+     * @param m
+     *            Measurement.
      */
     public void processMeasurement(Measurement m) {
-        groups.computeIfAbsent(this.grouper.apply(m), key -> this.newGroup())
-            .add(this.mapper.applyAsDouble(m));
+        groups.computeIfAbsent(this.grouper.apply(m), key -> this.newGroup()).add(this.mapper.applyAsDouble(m));
     }
 
     /**
@@ -107,7 +108,15 @@ public abstract class NumericGroupedQuery<T> extends EachProcessor {
      * `add`. The `get` method should return a single reduced value.
      */
     public interface Group {
+        /**
+         * @param n
+         *            some double
+         */
         public void add(double n);
+
+        /**
+         * @return the double
+         */
         public double get();
     }
 }

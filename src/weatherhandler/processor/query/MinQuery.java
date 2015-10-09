@@ -1,24 +1,22 @@
 package weatherhandler.processor.query;
 
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
-import java.lang.AutoCloseable;
 
-import weatherhandler.data.Measurement;
 import weatherhandler.Logger;
+import weatherhandler.data.Measurement;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  *
- * Query class for computing the lowest value by some grouping. Output is sent
- * to an OutputStream in TSV format.
+ *         Query class for computing the lowest value by some grouping. Output
+ *         is sent to an OutputStream in TSV format.
+ * @param <T>
+ *            Type
  */
-public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable {
+public class MinQuery<T> extends NumericGroupedQuery<T>implements AutoCloseable {
     /**
      * Used by NumericGroupedQuery for logging (potentially).
      */
@@ -27,31 +25,30 @@ public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable
     /**
      * Create a new MinQuery, directing output to the given output stream.
      *
-     * @param out Output stream.
-     * @param grouper Function that returns a group key for a given measurement.
-     * @param mapper Function that returns the number to use for the min()
-     *               computation.
+     * @param out
+     *            Output stream.
+     * @param grouper
+     *            Function that returns a group key for a given measurement.
+     * @param mapper
+     *            Function that returns the number to use for the min()
+     *            computation.
      */
-    public MinQuery(
-        OutputStream out,
-        Function<Measurement, T> grouper,
-        ToDoubleFunction<Measurement> mapper
-    ) {
+    public MinQuery(OutputStream out, Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
         super(out, grouper, mapper);
     }
 
     /**
      * Create a new MinQuery, directing output to standard output.
      *
-     * @param out Output stream.
-     * @param grouper Function that returns a group key for a given measurement.
-     * @param mapper Function that returns the number to use for the min()
-     *               computation.
+     * @param out
+     *            Output stream.
+     * @param grouper
+     *            Function that returns a group key for a given measurement.
+     * @param mapper
+     *            Function that returns the number to use for the min()
+     *            computation.
      */
-    public MinQuery(
-        Function<Measurement, T> grouper,
-        ToDoubleFunction<Measurement> mapper
-    ) {
+    public MinQuery(Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
         super(grouper, mapper);
     }
 
@@ -59,10 +56,7 @@ public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable
      * @return Query that computes the lowest temperature ever measured.
      */
     public static MinQuery<Integer> temperature() {
-        return new MinQuery<Integer>(
-            m -> 1,
-            Measurement::getTemperature
-        );
+        return new MinQuery<Integer>(m -> 1, Measurement::getTemperature);
     }
 
     /**
@@ -81,11 +75,7 @@ public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable
         this.output.println("group_key\tminimum");
         for (T group : groups.keySet()) {
             this.output.println(
-                String.join("\t", new String[] {
-                    "" + group,
-                    String.format("%.1f", groups.get(group).get())
-                })
-            );
+                    String.join("\t", new String[] { "" + group, String.format("%.1f", groups.get(group).get()) }));
         }
     }
 
@@ -102,7 +92,8 @@ public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable
          * Check a new contestant for the title of "Lowest Number Known To This
          * Group".
          *
-         * @param n The daring new contestant.
+         * @param n
+         *            The daring new contestant.
          */
         public void add(double n) {
             if (n < min) {

@@ -4,8 +4,8 @@ package weatherhandler.data;
  * @author Marijn Pool
  * @author René Kooi
  * 
- * Measurement is a representation of one measurement of a weather station.
- * This class is purely a dataclass
+ *         Measurement is a representation of one measurement of a weather
+ *         station. This class is purely a dataclass
  */
 @SuppressWarnings("javadoc")
 public class Measurement {
@@ -28,42 +28,55 @@ public class Measurement {
     public int getStation() {
         return station;
     }
+
     public String getDate() {
         return date;
     }
+
     public String getTime() {
         return time;
     }
+
     public float getTemperature() {
         return temperature;
     }
+
     public float getDewPoint() {
         return dewPoint;
     }
+
     public float getStationPressure() {
         return stationPressure;
     }
+
     public float getSeaLevelPressure() {
         return seaLevelPressure;
     }
+
     public float getVisibility() {
         return visibility;
     }
+
     public float getWindSpeed() {
         return windSpeed;
     }
+
     public float getPrecipitation() {
         return precipitation;
     }
+
     public float getSnowDepth() {
         return snowDepth;
     }
+
     public String getEvents() {
         return events;
     }
+
     public float getCloudCover() {
         return cloudCover;
     }
+
     public int getWindDirection() {
         return windDirection;
     }
@@ -72,48 +85,62 @@ public class Measurement {
     public void setStation(int station) {
         this.station = station;
     }
+
     public void setDate(String date) {
         this.date = date;
     }
+
     public void setTime(String time) {
         this.time = time;
     }
+
     public void setTemperature(float temperature) {
         this.temperature = temperature;
     }
+
     public void setDewPoint(float dewPoint) {
         this.dewPoint = dewPoint;
     }
+
     public void setStationPressure(float stationPressure) {
         this.stationPressure = stationPressure;
     }
+
     public void setSeaLevelPressure(float seaLevelPressure) {
         this.seaLevelPressure = seaLevelPressure;
     }
+
     public void setVisibility(float visibility) {
         this.visibility = visibility;
     }
+
     public void setWindSpeed(float windSpeed) {
         this.windSpeed = windSpeed;
     }
+
     public void setPrecipitation(float precipitation) {
         this.precipitation = precipitation;
     }
+
     public void setSnowDepth(float snowDepth) {
         this.snowDepth = snowDepth;
     }
+
     public void setEvents(String events) {
         this.events = events;
     }
+
     public void setCloudCover(float cloudCover) {
         this.cloudCover = cloudCover;
     }
+
     public void setWindDirection(int windDirection) {
         this.windDirection = windDirection;
     }
 
     /**
      * Creates a XML entry of this measurement, including TABS
+     * 
      * @return XML of this Measurement
      */
     public String toXML() {

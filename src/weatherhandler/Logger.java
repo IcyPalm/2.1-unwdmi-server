@@ -1,13 +1,14 @@
 package weatherhandler;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  * 
- * Logger class will log errors, warnings or other messages to the standarderror
+ *         Logger class will log errors, warnings or other messages to the
+ *         standarderror
  */
 public class Logger {
     /**
@@ -33,7 +34,9 @@ public class Logger {
 
     /**
      * Create a new logger with a name
-     * @param name The name for the Logger
+     * 
+     * @param name
+     *            The name for the Logger
      */
     public Logger(String name) {
         this.name = name;
@@ -41,15 +44,15 @@ public class Logger {
 
     private void log(String level, String[] text) {
         String time = new SimpleDateFormat("hh:mm:ss").format(new Date());
-        System.err.println(
-            "[" + level + " " + time + "] " +
-            this.name + ": " + String.join(" ", text)
-        );
+        System.err.println("[" + level + " " + time + "] " + this.name + ": " + String.join(" ", text));
     }
 
     /**
-     * Output a debug message only if the log level is equal or higher than DEBUG
-     * @param args Strings to print
+     * Output a debug message only if the log level is equal or higher than
+     * DEBUG
+     * 
+     * @param args
+     *            Strings to print
      */
     public void debug(String... args) {
         if (Logger.level >= Logger.DEBUG) {
@@ -59,7 +62,9 @@ public class Logger {
 
     /**
      * Output an message only if the log level is equal or higher than INFO
-     * @param args Strings to print
+     * 
+     * @param args
+     *            Strings to print
      */
     public void info(String... args) {
         if (Logger.level >= Logger.INFO) {
@@ -68,18 +73,24 @@ public class Logger {
     }
 
     /**
-     * Output a warning message only if the log level is equal or higher than WARN
-     * @param args Strings to print
+     * Output a warning message only if the log level is equal or higher than
+     * WARN
+     * 
+     * @param args
+     *            Strings to print
      */
     public void warn(String... args) {
         if (Logger.level >= Logger.WARN) {
             this.log("WARN", args);
         }
     }
-    
+
     /**
-     * Output an error message only if the log level is equal or higher than ERROR
-     * @param args Strings to print
+     * Output an error message only if the log level is equal or higher than
+     * ERROR
+     * 
+     * @param args
+     *            Strings to print
      */
     public void error(String... args) {
         this.log("ERROR", args);

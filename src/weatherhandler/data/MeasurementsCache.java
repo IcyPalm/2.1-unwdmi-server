@@ -1,19 +1,16 @@
 package weatherhandler.data;
 
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.HashMap;
-
-import weatherhandler.data.Station;
-import weatherhandler.data.Stations;
-
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
  * 
- * MeasurementCache will create a LinkedList of Measurements for every station that exists
+ *         MeasurementCache will create a LinkedList of Measurements for every
+ *         station that exists
  */
 public class MeasurementsCache {
     private static Map<Integer, List<Measurement>> cache = new HashMap<>();
@@ -30,7 +27,8 @@ public class MeasurementsCache {
     }
 
     /**
-     * @param station The station ID for the list that is returned
+     * @param station
+     *            The station ID for the list that is returned
      * @return The List of Measurements that is returned based on the station ID
      */
     public static List<Measurement> getCache(Integer station) {

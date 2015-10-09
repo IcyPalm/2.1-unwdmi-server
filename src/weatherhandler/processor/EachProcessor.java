@@ -11,9 +11,11 @@ import weatherhandler.data.Measurement;
  */
 abstract public class EachProcessor implements Processor {
     /**
-     * @param measurement The {@link Measurement} you want to process
-     * @throws ProcessorException That is thrown when a {@link Processor} 
-     * encounters an exception
+     * @param measurement
+     *            The {@link Measurement} you want to process
+     * @throws ProcessorException
+     *             That is thrown when a {@link Processor} encounters an
+     *             exception
      */
     abstract public void processMeasurement(Measurement measurement) throws ProcessorException;
 
