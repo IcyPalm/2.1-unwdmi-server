@@ -1,6 +1,7 @@
 package weatherhandler;
 
 import weatherhandler.data.MeasurementsCache;
+import weatherhandler.data.Stations;
 import weatherhandler.Logger;
 import weatherhandler.parser.WeatherParser;
 import weatherhandler.processor.Processor;
@@ -23,12 +24,8 @@ public class WeatherServer implements Runnable {
 
     @Override
     public void run() {
-        try {
-            MeasurementsCache.init();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        Stations.loadFromTSV("./stations.tsv");
+        MeasurementsCache.init();
 
         this.logger.info("Server started");
         try {
