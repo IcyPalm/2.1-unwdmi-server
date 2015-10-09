@@ -8,6 +8,13 @@ import java.util.HashMap;
 import weatherhandler.data.Station;
 import weatherhandler.data.Stations;
 
+
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * MeasurementCache will create a LinkedList of Measurements for every station that exists
+ */
 public class MeasurementsCache {
     private static Map<Integer, List<Measurement>> cache = new HashMap<>();
 
