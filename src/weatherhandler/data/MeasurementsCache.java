@@ -18,6 +18,9 @@ import weatherhandler.data.Stations;
 public class MeasurementsCache {
     private static Map<Integer, List<Measurement>> cache = new HashMap<>();
 
+    /**
+     * Init the MeasurementCache
+     */
     public static void init() {
         for (Station station : Stations.getStations()) {
             // TODO use a custom List class that also updates averages for every
@@ -26,6 +29,10 @@ public class MeasurementsCache {
         }
     }
 
+    /**
+     * @param station The station ID for the list that is returned
+     * @return The List of Measurements that is returned based on the station ID
+     */
     public static List<Measurement> getCache(Integer station) {
         return cache.get(station);
     }

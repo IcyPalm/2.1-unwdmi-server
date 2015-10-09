@@ -1,5 +1,13 @@
 package weatherhandler.data;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * Measurement is a representation of one measurement of a weather station.
+ * This class is purely a dataclass
+ */
+@SuppressWarnings("javadoc")
 public class Station {
     int id;
     String name;
@@ -9,6 +17,7 @@ public class Station {
     float elevation;
 
     // Getters
+    
     public int getID() {
         return id;
     }
@@ -48,7 +57,10 @@ public class Station {
         this.elevation = elevation;
     }
 
-
+    /**
+     * Creates a XML entry of this station, including TABS
+     * @return XML of this Station
+     */
     public String toXML() {
         StringBuffer sb = new StringBuffer();
         sb.append("<STATION>\n");

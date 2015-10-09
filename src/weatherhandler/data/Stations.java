@@ -16,18 +16,37 @@ import weatherhandler.data.Station;
 import weatherhandler.database.Database;
 import weatherhandler.Logger;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * This class will contain a list of all available Stations
+ * Can be loaded from database or TSV
+ */
 public class Stations {
     private static Map<Integer, Station> stations = new HashMap<>();
     private static Logger logger = new Logger("Stations");
 
+    /**
+     * Return the requested station from list
+     * @param id the requested station ID
+     * @return The requested {@link Station}
+     */
     public static Station getStation(int id) {
         return stations.get(id);
     }
 
+    /**
+     * @return a Collection of all Stations
+     */
     public static Collection<Station> getStations() {
         return stations.values();
     }
 
+    /**
+     * Create a collection of Stations from a TSV file
+     * @param fileName the file containing all stations in TSV format
+     */
     public static void loadFromTSV(String fileName) {
         try (BufferedReader lines = new BufferedReader(new FileReader(fileName))) {
             String line;
@@ -48,6 +67,9 @@ public class Stations {
         }
     }
 
+    /**
+     * Create a collection of Stations from a database
+     */
     public static void loadFromDatabase() {
         try (Statement st = Database.getConnection().createStatement()) {
             ResultSet rs = st.executeQuery("SELECT * FROM stations");
