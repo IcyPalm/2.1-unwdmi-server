@@ -12,6 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * This class will receive processed measurements and insert them into 
+ * the database
+ */
 public class DBStorageProcessor implements Processor {
     final private static int STATION_ID = 1;
     final private static int TIME = 2;
@@ -30,6 +37,11 @@ public class DBStorageProcessor implements Processor {
     private Connection connection;
     private String tableName;
 
+    /**
+     * Create a new {@link DBStorageProcessor} that will enter measurements in
+     * the table
+     * @param tableName The Table name that is used to store the measurements
+     */
     public DBStorageProcessor(String tableName) {
         this.tableName = tableName;
 

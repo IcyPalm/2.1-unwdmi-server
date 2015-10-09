@@ -7,10 +7,23 @@ import java.util.function.BiConsumer;
 import weatherhandler.data.Measurement;
 import weatherhandler.data.MeasurementsCache;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * Processor that will fill in missing or defective data based on previous measurements.
+ * It will access a {@link MeasurementsCache} and base the new value on that.
+ * Also it will keep the cachesize equal
+ */
 public class CompleteMissingProcessor implements Processor {
     private int cacheSize;
     private Processor inner;
 
+    /**
+     * Create a new {@link CompleteMissingProcessor} 
+     * @param cacheSize the size of the {@link MeasurementsCache} 
+     * @param inner {@link Processor} that will get the data and process it
+     */
     public CompleteMissingProcessor(int cacheSize, Processor inner) {
         this.cacheSize = cacheSize;
         this.inner = inner;
