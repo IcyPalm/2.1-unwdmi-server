@@ -13,6 +13,13 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * The Database class is responsible for connecting to the PostgreSQL database
+ * 
+ */
 public class Database {
     // #Hardcoded
     private static final String DB_URL = "jdbc:postgresql://localhost:5432/weatherhandler";
@@ -26,6 +33,8 @@ public class Database {
 
     /**
      * Initialize a database connection.
+     * @return The database connection
+     * @throws SQLException When something goes wrong with the connection
      */
     public static Connection getConnection() throws SQLException {
         if (connection != null) {
@@ -42,6 +51,10 @@ public class Database {
         return connection;
     }
 
+    /**
+     * Create tables when they do not exist
+     * @throws SQLException when something goes wrong
+     */
     public static synchronized void createTables() throws SQLException {
         if (createdTables) {
             return;
