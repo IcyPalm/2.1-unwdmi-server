@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -classpath bin:/usr/share/java/postgresql-jdbc4.jar weatherhandler.ServerStarter $@

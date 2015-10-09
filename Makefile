@@ -20,7 +20,7 @@ run: build
 	# TODO don't hardcode this, dummy
 	# I don't really know how java classpath config works, it seems really shit
 	# to have to manually set this as a user though >_>
-	java -classpath bin:/usr/share/java/postgresql-jdbc4.jar weatherhandler.ServerStarter
+	./run
 
 opendb:
 	psql weatherhandler -h 127.0.0.1 -d weatherhandler
