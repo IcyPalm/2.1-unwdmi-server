@@ -1,43 +1,59 @@
 package weatherhandler.processor.query;
 
 import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.lang.AutoCloseable;
 
 import weatherhandler.data.Measurement;
 import weatherhandler.Logger;
-import weatherhandler.processor.EachProcessor;
 
-public class AverageQuery<T> extends EachProcessor implements AutoCloseable {
-    private Map<T, Averager> averages = new HashMap<>();
-    private Logger logger = new Logger("AverageQuery");
-    private PrintStream output;
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ *
+ * Query class for computing averages by some grouping. Output is sent to an
+ * OutputStream in TSV format.
+ */
+public class AverageQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable {
+    /**
+     * Used by NumericGroupedQuery for logging (potentially).
+     */
+    protected Logger logger = new Logger("AverageQuery");
 
-    private Function<Measurement, T> grouper;
-    private ToDoubleFunction<Measurement> mapper;
-
+    /**
+     * Create a new AverageQuery, directing output to the given output stream.
+     *
+     * @param out Output stream.
+     * @param grouper Function that returns a group key for a given measurement.
+     * @param mapper Function that returns the number to use for the average
+     *               computation.
+     */
     public AverageQuery(
         OutputStream out,
         Function<Measurement, T> grouper,
         ToDoubleFunction<Measurement> mapper
     ) {
-        this.output = new PrintStream(out);
-        this.grouper = grouper;
-        this.mapper = mapper;
+        super(out, grouper, mapper);
     }
+
+    /**
+     * Create a new AverageQuery, directing output to standard output.
+     *
+     * @param grouper Function that returns a group key for a given measurement.
+     * @param mapper Function that returns the number to use for the average
+     *               computation.
+     */
     public AverageQuery(
         Function<Measurement, T> grouper,
         ToDoubleFunction<Measurement> mapper
     ) {
-        this.output = System.out;
-        this.grouper = grouper;
-        this.mapper = mapper;
+        super(grouper, mapper);
     }
 
+    /**
+     * @return Query that computes the average temperature for every station.
+     */
     public static AverageQuery<Integer> temperatureByStation() {
         return new AverageQuery<>(
             m -> m.getStation(),
@@ -45,30 +61,57 @@ public class AverageQuery<T> extends EachProcessor implements AutoCloseable {
         );
     }
 
-    public void processMeasurement(Measurement m) {
-        averages.computeIfAbsent(this.grouper.apply(m), key -> new Averager())
-            .add(this.mapper.applyAsDouble(m));
+    /**
+     * Create a new query group.
+     *
+     * @return Query group that computes the average of the given numbers.
+     */
+    protected Averager newGroup() {
+        return new Averager();
     }
 
+    /**
+     * Print the result set to a file or stream in TSV format.
+     */
     public void close() {
         this.output.println("group_key\taverage");
-        for (T group : averages.keySet()) {
+        for (T group : groups.keySet()) {
             this.output.println(
                 String.join("\t", new String[] {
                     "" + group,
-                    "" + averages.get(group).get()
+                    "" + groups.get(group).get()
                 })
             );
         }
     }
 
-    private class Averager {
+    /**
+     * Group class for computing averages.
+     */
+    private class Averager implements NumericGroupedQuery.Group {
+        /**
+         * Sum of the numbers seen so far.
+         */
         private double sum = 0;
+
+        /**
+         * Amount of numbers seen so far.
+         */
         private double count = 0;
+
+        /**
+         * Add a new number to the computation.
+         *
+         * @param n The new number.
+         */
         public void add(double n) {
             sum += n;
             count++;
         }
+
+        /**
+         * @return The average of all added numbers.
+         */
         public double get() {
             return sum / count;
         }
