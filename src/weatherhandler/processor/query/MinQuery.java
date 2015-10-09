@@ -83,7 +83,7 @@ public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable
             this.output.println(
                 String.join("\t", new String[] {
                     "" + group,
-                    "" + groups.get(group).get()
+                    String.format("%.1f", groups.get(group).get())
                 })
             );
         }
@@ -96,7 +96,7 @@ public class MinQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable
         /**
          * Lowest number seen so far.
          */
-        private double min = 0;
+        private double min = Double.MAX_VALUE;
 
         /**
          * Check a new contestant for the title of "Lowest Number Known To This
