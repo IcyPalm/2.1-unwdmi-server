@@ -1,5 +1,13 @@
 package weatherhandler.data;
 
+/**
+ * @author Marijn Pool
+ * @author René Kooi
+ * 
+ * Measurement is a representation of one measurement of a weather station.
+ * This class is purely a dataclass
+ */
+@SuppressWarnings("javadoc")
 public class Measurement {
     int station;
     String date;
@@ -104,6 +112,10 @@ public class Measurement {
         this.windDirection = windDirection;
     }
 
+    /**
+     * Creates a XML entry of this measurement, including TABS
+     * @return XML of this Measurement
+     */
     public String toXML() {
         StringBuffer sb = new StringBuffer();
         sb.append("<MEASUREMENT>\n");
