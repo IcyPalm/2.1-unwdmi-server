@@ -35,6 +35,7 @@ public class TSVParser implements AutoCloseable {
             .map(this::parse)
             .map(this::toList)
             .forEach(this::processMeasurements);
+        this.done();
     }
 
     public void close() throws IOException {
@@ -53,6 +54,17 @@ public class TSVParser implements AutoCloseable {
         } catch (ProcessorException e) {
             this.logger.error("Processor error:");
             e.printStackTrace();
+        }
+    }
+
+    private void done() {
+        if (this.output instanceof AutoCloseable) {
+            try {
+                ((AutoCloseable) this.output).close();
+            } catch (Exception e) {
+                this.logger.error("Close error:");
+                e.printStackTrace();
+            }
         }
     }
 
