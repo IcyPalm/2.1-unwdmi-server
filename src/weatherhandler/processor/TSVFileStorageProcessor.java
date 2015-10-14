@@ -11,7 +11,7 @@ import weatherhandler.data.Measurement;
 /**
  * @author Marijn Pool
  * @author René Kooi
- * 
+ *
  *         {@link TSVFileStorageProcessor} will output {@link Measurement} to a
  *         TSV file
  */
@@ -20,7 +20,7 @@ public class TSVFileStorageProcessor implements Processor {
 
     /**
      * Constructor of {@link TSVFileStorageProcessor}
-     * 
+     *
      * @param fileName
      *            the filename of the file that should be written to
      */
@@ -48,7 +48,9 @@ public class TSVFileStorageProcessor implements Processor {
     }
 
     public synchronized void processMeasurements(List<Measurement> measurements) throws ProcessorException {
-        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(this.fileName, true)))) {
+        try (PrintWriter out = new PrintWriter(
+                new BufferedWriter(
+                    new FileWriter(this.fileName, true)))) {
             for (Measurement m : measurements) {
                 out.println(this.toTSV(m));
             }
