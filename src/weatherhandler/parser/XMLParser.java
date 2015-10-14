@@ -19,25 +19,25 @@ import weatherhandler.processor.ProcessorException;
 /**
  * @author Marijn Pool
  * @author René Kooi
- * 
+ *
  *         The WeatherParser will receive XML input and parse it into
  *         Measurements It is SAX based so that if the XML is not 100% valid it
  *         will still parse. Another reason for SAX is the lighter RAM use over
  *         DOM
- * 
+ *
  */
-public class WeatherParser {
-    private Logger logger = new Logger("WeatherParser");
+public class XMLParser {
+    private Logger logger = new Logger("XMLParser");
 
     /**
      * Create a new WeatherParser and immediately parse the data
-     * 
+     *
      * @param input
      *            The input String containing the XML data
      * @param out
      *            The Processor that will receive the data
      */
-    public WeatherParser(String input, Processor out) {
+    public XMLParser(String input, Processor out) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
         try {
             SAXParser saxParser = saxParserFactory.newSAXParser();

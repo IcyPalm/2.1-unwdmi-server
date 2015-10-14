@@ -11,18 +11,19 @@ import java.util.stream.Stream;
 
 import weatherhandler.Logger;
 import weatherhandler.data.Measurement;
+import weatherhandler.parser.Parser;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.ProcessorException;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
- * 
+ *
  *         TSVParser is a class that processes Tab Separated Value files
  *         containing measurement data.
- * 
+ *
  */
-public class TSVParser implements AutoCloseable {
+public class TSVParser implements Parser, AutoCloseable {
     private Logger logger = new Logger("TSVParser");
     private BufferedReader reader;
     private Stream<String> stream;
@@ -30,7 +31,7 @@ public class TSVParser implements AutoCloseable {
 
     /**
      * Create a new TSVParser with a filename
-     * 
+     *
      * @param fileName
      *            The File you want to read from
      * @param out
@@ -44,7 +45,7 @@ public class TSVParser implements AutoCloseable {
 
     /**
      * Create a new TSVParser with a buffered reader instead of a file
-     * 
+     *
      * @param reader
      *            the input reader
      * @param out

@@ -10,8 +10,9 @@ import java.util.Map;
 import weatherhandler.data.MeasurementsCache;
 import weatherhandler.data.Measurement;
 import weatherhandler.data.Stations;
+import weatherhandler.parser.Parser;
 import weatherhandler.parser.TSVParser;
-import weatherhandler.parser.WeatherParser;
+import weatherhandler.parser.ServerParser;
 import weatherhandler.processor.BatchUpdatesProcessor;
 import weatherhandler.processor.CompleteMissingProcessor;
 import weatherhandler.processor.DBStorageProcessor;
@@ -38,8 +39,7 @@ public class WeatherServer implements Runnable {
     final public static int SERVER_PORT = 7789;
 
     private Map<String, String> options;
-    private Socket socket;
-    private ServerSocket TCPsocket;
+    private Parser parser;
     private Logger logger = new Logger("Server");
 
     /**
@@ -112,81 +112,28 @@ public class WeatherServer implements Runnable {
                 System.exit(1);
             }
         } else {
-
-            try {
-                TCPsocket = new ServerSocket(SERVER_PORT);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            this.logger.info("Listening on " + SERVER_PORT);
-
-            int clients = 0;
-            while (true) {
-                try {
-                    socket = TCPsocket.accept();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                Runnable thread = new ServerHandler(socket, new CompleteMissingProcessor(30, processor));
-                new Thread(thread).start();
-                clients++;
-                if (clients % 50 == 0) {
-                    this.logger.debug("New Client (" + clients + " connected)");
-                }
-            }
+            // "processor" does not change here anymore,
+            // this is to tell Java that it _really_ won't
+            Processor proc = processor;
+            parser = new ServerParser(SERVER_PORT,
+                                      () -> new CompleteMissingProcessor(30, proc));
+            parser.process();
         }
     }
 
     /**
-     * Close ServerSocket
+     * Close Parser.
      */
     public void interrupt() {
-        try {
-            TCPsocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-class ServerHandler implements Runnable {
-
-    private Socket socket;
-    private Processor processor;
-
-    public ServerHandler(Socket socket, Processor processor) {
-        this.socket = socket;
-        this.processor = processor;
-    }
-
-    @Override
-    public void run() {
-        String line;
-        StringBuilder lines = new StringBuilder();
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            // Read data client sends to server
-            while ((line = in.readLine()) != null) {
-                lines.append(line);
-                // if </WEATHERDATA> is encountered close document and create
-                // new Parser.
-                if (line.contains("</WEATHERDATA>")) {
-                    new WeatherParser(lines.toString(), this.processor);
-                    lines.setLength(0);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            // Close connection
+        if (this.parser != null && this.parser instanceof AutoCloseable) {
             try {
-                socket.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+                this.parser.close();
+            } catch (Exception e) {
+                this.logger.error("Interrupt error:");
+                e.printStackTrace();
             }
         }
-
     }
 }
+
+
