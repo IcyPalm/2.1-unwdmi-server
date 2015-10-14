@@ -15,10 +15,10 @@ import weatherhandler.Logger;
 /**
  * @author Marijn Pool
  * @author René Kooi
- * 
+ *
  *         The Database class is responsible for connecting to the PostgreSQL
  *         database
- * 
+ *
  */
 public class Database {
     // #Hardcoded
@@ -33,7 +33,7 @@ public class Database {
 
     /**
      * Initialize a database connection.
-     * 
+     *
      * @return The database connection
      * @throws SQLException
      *             When something goes wrong with the connection
@@ -55,7 +55,7 @@ public class Database {
 
     /**
      * Create tables when they do not exist
-     * 
+     *
      * @throws SQLException
      *             when something goes wrong
      */
@@ -64,7 +64,11 @@ public class Database {
             return;
         }
         Statement st = getConnection().createStatement();
-        ResultSet res = st.executeQuery("SELECT count(*) " + "FROM pg_tables " + "WHERE tablename = 'stations';");
+        ResultSet res = st.executeQuery(
+            "SELECT count(*) " +
+            "FROM pg_tables " +
+            "WHERE tablename = 'stations';"
+        );
         boolean stationsExists = false;
         while (res.next()) {
             if (res.getInt(1) > 0) {
@@ -75,29 +79,50 @@ public class Database {
 
         if (!stationsExists) {
             st = getConnection().createStatement();
-            st.executeUpdate("CREATE TABLE IF NOT EXISTS stations (\n" + "  id INT NOT NULL,\n"
-                    + "  name VARCHAR(64) NOT NULL,\n" + "  country VARCHAR(64) NOT NULL,\n"
-                    + "  latitude DOUBLE PRECISION NOT NULL,\n" + "  longitude DOUBLE PRECISION NOT NULL,\n"
-                    + "  elevation DOUBLE PRECISION NOT NULL,\n" + "  PRIMARY KEY(id)\n" + ");");
+            st.executeUpdate(
+                "CREATE TABLE IF NOT EXISTS stations (\n" +
+                "  id INT NOT NULL,\n" +
+                "  name VARCHAR(64) NOT NULL,\n" +
+                "  country VARCHAR(64) NOT NULL,\n" +
+                "  latitude DOUBLE PRECISION NOT NULL,\n" +
+                "  longitude DOUBLE PRECISION NOT NULL,\n" +
+                "  elevation DOUBLE PRECISION NOT NULL,\n" +
+                "  PRIMARY KEY(id)\n" +
+                ");"
+            );
 
             seedStations();
         }
 
         st = getConnection().createStatement();
-        st.executeUpdate("CREATE TABLE IF NOT EXISTS weather_measurements (\n" + "  id SERIAL,\n"
-                + "  station_id INT REFERENCES stations(id),\n" + "  time TIMESTAMP,\n" + "  temperature REAL,\n"
-                + "  dew_point REAL,\n" + "  station_pressure REAL,\n" + "  sea_level_pressure REAL,\n"
-                + "  visibility REAL,\n" + "  wind_speed REAL,\n" + "  precipitation REAL,\n" + "  snow_depth REAL,\n"
-                + "  events VARCHAR(12),\n" + // this VARCHAR(12) is TEMPORARILY
-                                              // PLEASE
-                "  cloud_cover REAL,\n" + "  wind_direction INT,\n" + "  PRIMARY KEY (id)\n" + ");");
+        st.executeUpdate(
+            "CREATE TABLE IF NOT EXISTS weather_measurements (\n" +
+            "  id SERIAL,\n" +
+            "  station_id INT REFERENCES stations(id),\n" +
+            "  time TIMESTAMP,\n" +
+            "  temperature REAL,\n" +
+            "  dew_point REAL,\n" +
+            "  station_pressure REAL,\n" +
+            "  sea_level_pressure REAL,\n" +
+            "  visibility REAL,\n" +
+            "  wind_speed REAL,\n" +
+            "  precipitation REAL,\n" +
+            "  snow_depth REAL,\n" +
+            "  events VARCHAR(12),\n" + // this VARCHAR(12) is TEMPORARILY
+                                        // PLEASE
+            "  cloud_cover REAL,\n" +
+            "  wind_direction INT,\n" +
+            "  PRIMARY KEY (id)\n" +
+            ");"
+        );
         createdTables = true;
     }
 
     private static void seedStations() throws SQLException {
-        PreparedStatement st = getConnection()
-                .prepareStatement("INSERT INTO stations (id, name, country, latitude, longitude, elevation) "
-                        + "VALUES (?, ?, ?, ?, ?, ?)");
+        PreparedStatement st = getConnection().prepareStatement(
+            "INSERT INTO stations (id, name, country, latitude, longitude, elevation) " +
+            "VALUES (?, ?, ?, ?, ?, ?)"
+        );
         // #Hardcoded :(
         try {
             BufferedReader lines = new BufferedReader(new FileReader("./stations.tsv"));

@@ -67,17 +67,17 @@ public class WeatherServer implements Runnable {
         if (options.containsKey("save")) {
             processor = this.options.get("save").equalsIgnoreCase("postgres")
                     ? new DBStorageProcessor(options.getOrDefault("table", "weather_measurements"))
-                            : new TSVFileStorageProcessor(options.getOrDefault("file", "measurements.tsv"));
+                    : new TSVFileStorageProcessor(options.getOrDefault("file", "measurements.tsv"));
 
-                    int batchSize = Integer.parseInt(options.getOrDefault("batch", "2000"), 10);
-                    if (batchSize > 0) {
-                        processor = new BatchUpdatesProcessor(batchSize, processor);
-                    }
+            int batchSize = Integer.parseInt(options.getOrDefault("batch", "2000"), 10);
+            if (batchSize > 0) {
+                processor = new BatchUpdatesProcessor(batchSize, processor);
+            }
 
-                    int monitorInterval = Integer.parseInt(options.getOrDefault("monitor", "5"), 10);
-                    if (monitorInterval > 0) {
-                        processor = new UpdatesMonitor(monitorInterval * 1000, processor);
-                    }
+            int monitorInterval = Integer.parseInt(options.getOrDefault("monitor", "5"), 10);
+            if (monitorInterval > 0) {
+                processor = new UpdatesMonitor(monitorInterval * 1000, processor);
+            }
         } else if (options.containsKey("query")) {
             switch (options.get("query")) {
             case "avg:temperatureByStation":
