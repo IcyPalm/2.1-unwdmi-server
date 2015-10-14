@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import weatherhandler.data.MeasurementsCache;
+import weatherhandler.data.Measurement;
 import weatherhandler.data.Stations;
 import weatherhandler.parser.TSVParser;
 import weatherhandler.parser.WeatherParser;
@@ -18,13 +19,15 @@ import weatherhandler.processor.NullProcessor;
 import weatherhandler.processor.Processor;
 import weatherhandler.processor.TSVFileStorageProcessor;
 import weatherhandler.processor.UpdatesMonitor;
-import weatherhandler.processor.query.AverageQuery;
-import weatherhandler.processor.query.MinQuery;
+import weatherhandler.processor.query.group.Average;
+import weatherhandler.processor.query.group.Minimum;
+import weatherhandler.processor.query.group.Maximum;
+import weatherhandler.processor.query.QueryExecuter;
 
 /**
  * @author Marijn Pool
  * @author René Kooi
- * 
+ *
  *         WeatherServer will open a ServerSocket on port 7789 and wait for any
  *         incoming weatherstation connections
  */
@@ -41,7 +44,7 @@ public class WeatherServer implements Runnable {
 
     /**
      * Constructor for the {@link WeatherServer} with the option to give params
-     * 
+     *
      * @param options
      *            The params that are passed from {@link ServerStarter}
      */
@@ -64,31 +67,36 @@ public class WeatherServer implements Runnable {
         if (options.containsKey("save")) {
             processor = this.options.get("save").equalsIgnoreCase("postgres")
                     ? new DBStorageProcessor(options.getOrDefault("table", "weather_measurements"))
-                            : new TSVFileStorageProcessor(options.getOrDefault("file", "measurements.tsv"));
+                    : new TSVFileStorageProcessor(options.getOrDefault("file", "measurements.tsv"));
 
-                    int batchSize = Integer.parseInt(options.getOrDefault("batch", "2000"), 10);
-                    if (batchSize > 0) {
-                        processor = new BatchUpdatesProcessor(batchSize, processor);
-                    }
+            int batchSize = Integer.parseInt(options.getOrDefault("batch", "2000"), 10);
+            if (batchSize > 0) {
+                processor = new BatchUpdatesProcessor(batchSize, processor);
+            }
 
-                    int monitorInterval = Integer.parseInt(options.getOrDefault("monitor", "5"), 10);
-                    if (monitorInterval > 0) {
-                        processor = new UpdatesMonitor(monitorInterval * 1000, processor);
-                    }
+            int monitorInterval = Integer.parseInt(options.getOrDefault("monitor", "5"), 10);
+            if (monitorInterval > 0) {
+                processor = new UpdatesMonitor(monitorInterval * 1000, processor);
+            }
         } else if (options.containsKey("query")) {
             switch (options.get("query")) {
             case "avg:temperatureByStation":
-                processor = AverageQuery.temperatureByStation();
+                processor = new QueryExecuter("station", "temperature", "avg");
                 break;
             case "avg:temperatureByCountry":
-                processor = AverageQuery.temperatureByCountry();
+                processor = new QueryExecuter("country", "temperature", "avg");
                 break;
             case "min:temperature":
-                processor = MinQuery.temperature();
+                processor = new QueryExecuter("all", "temperature", "min");
+                break;
+            case "max:temperature":
+                processor = new QueryExecuter("all", "temperature", "max");
                 break;
             default:
-                System.err.println("Unknown query \"" + options.get("query") + "\"");
-                System.exit(1);
+                String grouper = options.getOrDefault("group-by", "all");
+                String reducer = options.get("query");
+                String mapper = options.getOrDefault("value", "temperature");
+                processor = new QueryExecuter(grouper, mapper, reducer);
             }
         } else {
             this.logger.warn("No final processor set: Using NullProcessor");
