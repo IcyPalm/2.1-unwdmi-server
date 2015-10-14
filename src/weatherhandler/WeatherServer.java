@@ -93,8 +93,10 @@ public class WeatherServer implements Runnable {
                 processor = new QueryExecuter("all", "temperature", "max");
                 break;
             default:
-                System.err.println("Unknown query \"" + options.get("query") + "\"");
-                System.exit(1);
+                String grouper = options.getOrDefault("group-by", "all");
+                String reducer = options.get("query");
+                String mapper = options.getOrDefault("value", "temperature");
+                processor = new QueryExecuter(grouper, mapper, reducer);
             }
         } else {
             this.logger.warn("No final processor set: Using NullProcessor");

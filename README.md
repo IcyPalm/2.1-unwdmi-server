@@ -20,7 +20,7 @@ sources and endpoints.
 
 Listen for clients pushing XML weather data and store in postgres DB or a file:
 
-```
+```bash
 ./run --save postgres # default table is "weather_measurements"
 ./run --save postgres --table my_own_table # table is created if necessary
 ./run --save tsv --file measurements.tsv # file is created if necessary
@@ -36,9 +36,18 @@ Listen for clients pushing XML weather data and store in postgres DB or a file:
 
 Query data from a TSV file, outputting results as TSV, too:
 
-```
+```bash
 ./run --load measurements.tsv --query avg:temperatureByCountry
 ./run --load measurements.tsv --query min:temperature
+```
+
+Or if you want more flexibility:
+
+```bash
+./run --load measurements.tsv \
+      --query {avg,min,max} \
+      --value {temperature,dewpoint,stationpressure,sealevelpressure,visibility,windspeed,precipitation,snowdepth,cloudcover,winddirection} \ # defaults to "temperature"
+      --group-by {all,country,station} # defaults to "all"
 ```
 
 Copying data from a TSV file to a database:
