@@ -6,6 +6,7 @@ import java.util.function.ToDoubleFunction;
 
 import weatherhandler.Logger;
 import weatherhandler.data.Measurement;
+import weatherhandler.processor.query.group.Minimum;
 
 /**
  * @author Marijn Pool
@@ -34,7 +35,7 @@ public class MinQuery<T> extends NumericGroupedQuery<T>implements AutoCloseable 
      *            computation.
      */
     public MinQuery(OutputStream out, Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
-        super(out, grouper, mapper);
+        super(out, grouper, mapper, Minimum::new);
     }
 
     /**
@@ -49,7 +50,7 @@ public class MinQuery<T> extends NumericGroupedQuery<T>implements AutoCloseable 
      *            computation.
      */
     public MinQuery(Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
-        super(grouper, mapper);
+        super(grouper, mapper, Minimum::new);
     }
 
     /**
@@ -60,15 +61,6 @@ public class MinQuery<T> extends NumericGroupedQuery<T>implements AutoCloseable 
     }
 
     /**
-     * Create a new query group.
-     *
-     * @return Query group that returns the lowest value in the given numbers.
-     */
-    protected Minimum newGroup() {
-        return new Minimum();
-    }
-
-    /**
      * Print the result set to a file or stream in TSV format.
      */
     public void close() {
@@ -76,36 +68,6 @@ public class MinQuery<T> extends NumericGroupedQuery<T>implements AutoCloseable 
         for (T group : groups.keySet()) {
             this.output.println(
                     String.join("\t", new String[] { "" + group, String.format("%.1f", groups.get(group).get()) }));
-        }
-    }
-
-    /**
-     * Group class for computing minima.
-     */
-    protected class Minimum implements NumericGroupedQuery.Group {
-        /**
-         * Lowest number seen so far.
-         */
-        private double min = Double.MAX_VALUE;
-
-        /**
-         * Check a new contestant for the title of "Lowest Number Known To This
-         * Group".
-         *
-         * @param n
-         *            The daring new contestant.
-         */
-        public void add(double n) {
-            if (n < min) {
-                min = n;
-            }
-        }
-
-        /**
-         * @return The lowest value in this group.
-         */
-        public double get() {
-            return min;
         }
     }
 }

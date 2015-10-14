@@ -7,6 +7,7 @@ import java.util.function.ToDoubleFunction;
 import weatherhandler.Logger;
 import weatherhandler.data.Measurement;
 import weatherhandler.data.Stations;
+import weatherhandler.processor.query.group.Average;
 
 /**
  * @author Marijn Pool
@@ -17,7 +18,7 @@ import weatherhandler.data.Stations;
  * @param <T>
  *            Type
  */
-public class AverageQuery<T> extends NumericGroupedQuery<T>implements AutoCloseable {
+public class AverageQuery<T> extends NumericGroupedQuery<T> implements AutoCloseable {
     /**
      * Used by NumericGroupedQuery for logging (potentially).
      */
@@ -35,7 +36,7 @@ public class AverageQuery<T> extends NumericGroupedQuery<T>implements AutoClosea
      *            computation.
      */
     public AverageQuery(OutputStream out, Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
-        super(out, grouper, mapper);
+        super(out, grouper, mapper, Average::new);
     }
 
     /**
@@ -48,7 +49,7 @@ public class AverageQuery<T> extends NumericGroupedQuery<T>implements AutoClosea
      *            computation.
      */
     public AverageQuery(Function<Measurement, T> grouper, ToDoubleFunction<Measurement> mapper) {
-        super(grouper, mapper);
+        super(grouper, mapper, Average::new);
     }
 
     /**
@@ -66,54 +67,12 @@ public class AverageQuery<T> extends NumericGroupedQuery<T>implements AutoClosea
     }
 
     /**
-     * Create a new query group.
-     *
-     * @return Query group that computes the average of the given numbers.
-     */
-    protected Averager newGroup() {
-        return new Averager();
-    }
-
-    /**
      * Print the result set to a file or stream in TSV format.
      */
     public void close() {
         this.output.println("group_key\taverage");
         for (T group : groups.keySet()) {
             this.output.println(String.join("\t", new String[] { "" + group, "" + groups.get(group).get() }));
-        }
-    }
-
-    /**
-     * Group class for computing averages.
-     */
-    private class Averager implements NumericGroupedQuery.Group {
-        /**
-         * Sum of the numbers seen so far.
-         */
-        private double sum = 0;
-
-        /**
-         * Amount of numbers seen so far.
-         */
-        private double count = 0;
-
-        /**
-         * Add a new number to the computation.
-         *
-         * @param n
-         *            The new number.
-         */
-        public void add(double n) {
-            sum += n;
-            count++;
-        }
-
-        /**
-         * @return The average of all added numbers.
-         */
-        public double get() {
-            return sum / count;
         }
     }
 }
