@@ -1,14 +1,9 @@
 package weatherhandler;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Map;
 
 import weatherhandler.data.MeasurementsCache;
-import weatherhandler.data.Measurement;
 import weatherhandler.data.Stations;
 import weatherhandler.parser.Parser;
 import weatherhandler.parser.TSVParser;
