@@ -1,4 +1,4 @@
-# 2.1EINDbazen
+# 2.1 Unwdmi Server
 Something something but BETTER!
 
 Javazaken en dergelijk voor Hanze Hogeschool Informatica, Thema 2.1.
