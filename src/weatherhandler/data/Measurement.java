@@ -20,7 +20,7 @@ public class Measurement {
     float windSpeed;
     float precipitation;
     float snowDepth;
-    String events;
+    String events = "000000";
     float cloudCover;
     int windDirection;
 
